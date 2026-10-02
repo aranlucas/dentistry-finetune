@@ -1,4 +1,4 @@
-"""Local-only extraction and source-level splits. Corpus, examples, and raw outputs stay local."""
+"""Local extraction and source-level splits; separately approved snapshots may be exported."""
 import argparse,hashlib,json,random,re,sqlite3
 from pathlib import Path
 from task import messages,user_prompt,canonical
