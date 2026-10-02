@@ -52,6 +52,10 @@ Open `http://127.0.0.1:8765`. The demo starts with harmless synthetic text and c
 
 Frozen data and predictions refuse overwriting. For an evaluation interrupted by the resource guard, use `--resume` with `src/evaluate.py` or `src/bounded.py`; this continues only missing cases and checks the model/adapter/data/decoding fingerprint. It never gives an already-generated answer a second chance. Use a new experiment directory to change data, prompts, hyperparameters, or model weights.
 
+Resuming an already-complete evaluation returns its saved summary without loading the model, checking Mac resource counters, or replacing its original timing. If all predictions were saved but the final summary was interrupted, resume reconstructs metrics with unknown timing/memory explicitly marked unavailable. A missing original fingerprint or a runtime prompt that differs from frozen messages is rejected before inference.
+
+Hosted CI runs only standard-library synthetic contract/resume tests and Python compilation. It never downloads a model, trains, loads study documents, or uploads local files. Run its checks locally with `python3 src/checks.py` and `PYTHONPATH=src python3 -m unittest discover -s tests -v`. The local corpus integrity test is skipped on CI because the corpus is deliberately absent.
+
 The observed initial stopped attempt is a historical artifact; a fresh reproduction normally performs the shorter saved run only. `report.py` reads the historical stopped summary if present and otherwise marks it absent. No training/evaluation data are required for the code's synthetic contract tests; local split checks run when data exist.
 
 ## What the evaluation means

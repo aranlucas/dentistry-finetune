@@ -16,6 +16,7 @@ def export():
     files=[ROOT/name for name in TOP+AGGREGATE]
     files+=list((ROOT/'src').glob('*.py'))+list((ROOT/'configs').glob('*.json'))
     files+=list((ROOT/'docs').glob('*.json'))+list((ROOT/'docs').glob('*.md'))+[ROOT/'web/index.html']
+    files+=list((ROOT/'tests').glob('*.py'))+list((ROOT/'.github/workflows').glob('*.yml'))
     for path in files:
         if not path.is_file():raise FileNotFoundError(f'Required deliverable missing: {path.name}')
     # Detect accidental copied snippets before shipping. Titles/URLs/provenance are
