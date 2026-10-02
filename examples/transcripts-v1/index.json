@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "purpose": "illustrative_study_transcripts",
+  "authorship": "assistant_authored",
+  "synthetic_cases": true,
+  "actual_model_outputs": false,
+  "clinical_expert_reviewed": false,
+  "included_in_model_training": false,
+  "included_in_benchmark": false,
+  "source_check_date": "2026-10-01",
+  "source_check_timezone": "America/Los_Angeles",
+  "original_pilot_results_sha256": "4b90c7e19928b95a14ba8e7cf7f84367420a6733edc855bf57b9a8cad463b2d4",
+  "transcripts": [
+    {
+      "id": "01",
+      "file": "01-consent.md",
+      "response_style": "strong_response",
+      "source_ids": [
+        200
+      ],
+      "sources": [
+        {
+          "source_id": 200,
+          "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_informedconsent25.pdf",
+          "pdf_viewer_pages": [
+            2,
+            3,
+            4
+          ],
+          "original_pilot_split": "train"
+        }
+      ],
+      "sha256": "7e906053a53b77a88eb171a7130b39ee0c1fbd94c47959b6b1e8b98c4bde32f4"
+    },
+    {
+      "id": "02",
+      "file": "02-behavior-guidance.md",
+      "response_style": "weak_opening_then_correction",
+      "source_ids": [
+        192
+      ],
+      "sources": [
+        {
+          "source_id": 192,
+          "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_behavguide25.pdf",
+          "pdf_viewer_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "original_pilot_split": "train"
+        }
+      ],
+      "sha256": "81a0be1f82683b43722bca07b371a26995ff4d87f54d8cfd5f2b406171270995"
+    },
+    {
+      "id": "03",
+      "file": "03-caries-risk.md",
+      "response_style": "appropriate_uncertainty",
+      "source_ids": [
+        194
+      ],
+      "sources": [
+        {
+          "source_id": 194,
+          "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_cariesriskassessment25.pdf",
+          "pdf_viewer_pages": [
+            1,
+            2,
+            3,
+            5,
+            6
+          ],
+          "original_pilot_split": "train"
+        }
+      ],
+      "sha256": "82894242a71e925448f1bbd88f68d6e14610e71bb87d7ddfbefec4a9ec4412ea"
+    },
+    {
+      "id": "04",
+      "file": "04-antibiotic-stewardship.md",
+      "response_style": "reassessment_and_escalation",
+      "source_ids": [
+        191
+      ],
+      "sources": [
+        {
+          "source_id": 191,
+          "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_antibiotictherapy26.pdf",
+          "pdf_viewer_pages": [
+            1,
+            3,
+            4
+          ],
+          "original_pilot_split": "train"
+        }
+      ],
+      "sha256": "027261e2243e8c0c66b07b0d6355ecb78d9c6a655babdf48dd7d416b5f55501d"
+    },
+    {
+      "id": "05",
+      "file": "05-protective-stabilization.md",
+      "response_style": "safety_and_consent_boundary",
+      "source_ids": [
+        213
+      ],
+      "sources": [
+        {
+          "source_id": 213,
+          "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_protective25.pdf",
+          "pdf_viewer_pages": [
+            3,
+            4,
+            5
+          ],
+          "original_pilot_split": "train"
+        }
+      ],
+      "sha256": "29f8196197cd4c47b1c47e0cc4ca7dbf8be019d2b82a561537d6ea55d8fcba81"
+    }
+  ]
+}
