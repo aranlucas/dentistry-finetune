@@ -1,4 +1,4 @@
-"""Explicit code/aggregate/approved-dataset allowlist; no raw corpus, predictions, or weights."""
+"""Explicit code/aggregate/dataset/sample allowlist; no raw corpus, predictions, or weights."""
 import hashlib
 import json
 import shutil
@@ -10,6 +10,9 @@ TOP=['README.md','LICENSE','AGENTS.md','.gitignore','pyproject.toml','requiremen
 AGGREGATE=['runs/results.json','runs/training-summary.json','runs/train-metrics.jsonl']
 APPROVED_DATASET=['datasets/pilot-v1/'+name for name in
                   ['train.jsonl','valid.jsonl','heldout.jsonl','manifest.json','INTEGRITY.json','DATASET_CARD.md']]
+AUTHORED_TRANSCRIPTS=['examples/transcripts-v1/'+name for name in
+                     ['README.md','index.json','01-consent.md','02-behavior-guidance.md',
+                      '03-caries-risk.md','04-antibiotic-stewardship.md','05-protective-stabilization.md']]
 
 def export():
     target=ROOT/'.local/source-export'
@@ -19,24 +22,28 @@ def export():
     files+=list((ROOT/'src').glob('*.py'))+list((ROOT/'configs').glob('*.json'))
     files+=list((ROOT/'docs').glob('*.json'))+list((ROOT/'docs').glob('*.md'))+[ROOT/'web/index.html']
     files+=list((ROOT/'tests').glob('*.py'))+list((ROOT/'.github/workflows').glob('*.yml'))
-    files+=[ROOT/name for name in APPROVED_DATASET]
+    files+=[ROOT/name for name in APPROVED_DATASET+AUTHORED_TRANSCRIPTS]
     for path in files:
         if not path.is_file():raise FileNotFoundError(f'Required deliverable missing: {path.name}')
-    # Detect accidental copied snippets before shipping. Titles/URLs/provenance are
-    # also confined to the local manifest, rather than included in the export.
+    # Exact source snippets are permitted only in the approved pilot snapshot.
+    # Source titles/URLs may also appear in the requested authored transcript
+    # bibliographies, but that does not permit exporting source paragraphs there.
     local=ROOT/'data/manifest.json'
-    forbidden=[]
+    forbidden_metadata=[];forbidden_snippets=[]
     if local.exists():
         manifest=json.loads(local.read_text())
-        forbidden += [d['title'] for d in manifest['documents']]
-        forbidden += [d['publisher_url'] for d in manifest['documents']]
+        forbidden_metadata += [d['title'] for d in manifest['documents']]
+        forbidden_metadata += [d['publisher_url'] for d in manifest['documents']]
         for meta in manifest['splits'].values():
             rows=[json.loads(l) for l in (ROOT/'data'/meta['file']).read_text().splitlines()]
-            forbidden += [p['text'] for row in rows for p in row['passages']]
+            forbidden_snippets += [p['text'] for row in rows for p in row['passages']]
     receipt={}
     for path in sorted(set(files)):
         text=path.read_text()
-        if str(path.relative_to(ROOT)) not in APPROVED_DATASET and any(value and value in text for value in forbidden):
+        name=str(path.relative_to(ROOT))
+        forbidden=[] if name in APPROVED_DATASET else forbidden_snippets
+        if name not in APPROVED_DATASET+AUTHORED_TRANSCRIPTS:forbidden=forbidden+forbidden_metadata
+        if any(value and value in text for value in forbidden):
             raise ValueError(f'Unapproved local document content found in export: {path.name}')
         if path.suffix in ['.safetensors','.bin','.sqlite','.gguf']:raise ValueError('Model/corpus file forbidden')
         relative=path.relative_to(ROOT);output=target/relative;output.parent.mkdir(parents=True,exist_ok=True)
