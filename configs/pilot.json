@@ -1,0 +1,25 @@
+{
+  "model": "models/smollm2-135m",
+  "upstream": "HuggingFaceTB/SmolLM2-135M-Instruct",
+  "revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+  "seed": 20261002,
+  "iters": 40,
+  "batch_size": 1,
+  "num_layers": 4,
+  "max_seq_length": 384,
+  "learning_rate": 0.001,
+  "lora_parameters": {
+    "rank": 8,
+    "scale": 16.0,
+    "dropout": 0.0
+  },
+  "max_new_tokens": 96,
+  "train_seconds": 90,
+  "memory_limit_mib": 1024,
+  "cache_limit_mib": 64,
+  "wired_limit_mib": 384,
+  "minimum_system_free_percent": 25,
+  "max_system_swapout_growth_mib": 64,
+  "max_process_rss_mib": 1200,
+  "cooldown_seconds_per_batch": 0.35
+}

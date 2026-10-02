@@ -1,0 +1,6 @@
+[project]
+name = "oral-board-local-lab"
+version = "0.1.0"
+description = "A bounded local MLX LoRA experiment with local oral-board source-grounded study data"
+requires-python = ">=3.12,<3.13"
+dependencies = ["mlx-lm==0.32.0", "mlx==0.32.3", "psutil==7.2.2"]

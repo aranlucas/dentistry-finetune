@@ -1,0 +1,603 @@
+{
+  "finding": "On 24 paired cases, lexical extraction scored 24/24; base + excerpts 0/24; LoRA + excerpts 0/24. This small extractive benchmark does not establish clinical reliability or broad oral-board reasoning.",
+  "paired_n": 24,
+  "paired_metrics": {
+    "retrieval": {
+      "n": 24,
+      "json_valid": {
+        "count": 24,
+        "total": 24,
+        "rate": 1.0
+      },
+      "schema_valid": {
+        "count": 24,
+        "total": 24,
+        "rate": 1.0
+      },
+      "semantic_exact": {
+        "count": 24,
+        "total": 24,
+        "rate": 1.0
+      },
+      "citation_valid": {
+        "count": 24,
+        "total": 24,
+        "rate": 1.0
+      },
+      "grounded_quote": {
+        "count": 16,
+        "total": 24,
+        "rate": 0.6666666666666666
+      },
+      "abstained": {
+        "count": 8,
+        "total": 24,
+        "rate": 0.3333333333333333
+      },
+      "unsupported_answer": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      }
+    },
+    "base_rag": {
+      "n": 24,
+      "json_valid": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      },
+      "schema_valid": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      },
+      "semantic_exact": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      },
+      "citation_valid": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      },
+      "grounded_quote": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      },
+      "abstained": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      },
+      "unsupported_answer": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      }
+    },
+    "adapter_rag": {
+      "n": 24,
+      "json_valid": {
+        "count": 2,
+        "total": 24,
+        "rate": 0.08333333333333333
+      },
+      "schema_valid": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      },
+      "semantic_exact": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      },
+      "citation_valid": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      },
+      "grounded_quote": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      },
+      "abstained": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      },
+      "unsupported_answer": {
+        "count": 0,
+        "total": 24,
+        "rate": 0.0
+      }
+    }
+  },
+  "conditions": {
+    "retrieval": {
+      "status": "complete",
+      "planned_cases": 24,
+      "metrics": {
+        "n": 24,
+        "json_valid": {
+          "count": 24,
+          "total": 24,
+          "rate": 1.0
+        },
+        "schema_valid": {
+          "count": 24,
+          "total": 24,
+          "rate": 1.0
+        },
+        "semantic_exact": {
+          "count": 24,
+          "total": 24,
+          "rate": 1.0
+        },
+        "citation_valid": {
+          "count": 24,
+          "total": 24,
+          "rate": 1.0
+        },
+        "grounded_quote": {
+          "count": 16,
+          "total": 24,
+          "rate": 0.6666666666666666
+        },
+        "abstained": {
+          "count": 8,
+          "total": 24,
+          "rate": 0.3333333333333333
+        },
+        "unsupported_answer": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        }
+      },
+      "supported": {
+        "n": 16,
+        "json_valid": {
+          "count": 16,
+          "total": 16,
+          "rate": 1.0
+        },
+        "schema_valid": {
+          "count": 16,
+          "total": 16,
+          "rate": 1.0
+        },
+        "semantic_exact": {
+          "count": 16,
+          "total": 16,
+          "rate": 1.0
+        },
+        "citation_valid": {
+          "count": 16,
+          "total": 16,
+          "rate": 1.0
+        },
+        "grounded_quote": {
+          "count": 16,
+          "total": 16,
+          "rate": 1.0
+        },
+        "abstained": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "unsupported_answer": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        }
+      },
+      "abstention_cases": {
+        "n": 8,
+        "json_valid": {
+          "count": 8,
+          "total": 8,
+          "rate": 1.0
+        },
+        "schema_valid": {
+          "count": 8,
+          "total": 8,
+          "rate": 1.0
+        },
+        "semantic_exact": {
+          "count": 8,
+          "total": 8,
+          "rate": 1.0
+        },
+        "citation_valid": {
+          "count": 8,
+          "total": 8,
+          "rate": 1.0
+        },
+        "grounded_quote": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "abstained": {
+          "count": 8,
+          "total": 8,
+          "rate": 1.0
+        },
+        "unsupported_answer": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        }
+      },
+      "wall_seconds": 0.0013184170020394959,
+      "mlx_peak_mib": null
+    },
+    "base_rag": {
+      "status": "complete",
+      "planned_cases": 24,
+      "metrics": {
+        "n": 24,
+        "json_valid": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        },
+        "schema_valid": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        },
+        "semantic_exact": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        },
+        "citation_valid": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        },
+        "grounded_quote": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        },
+        "abstained": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        },
+        "unsupported_answer": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        }
+      },
+      "supported": {
+        "n": 16,
+        "json_valid": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "schema_valid": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "semantic_exact": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "citation_valid": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "grounded_quote": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "abstained": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "unsupported_answer": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        }
+      },
+      "abstention_cases": {
+        "n": 8,
+        "json_valid": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "schema_valid": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "semantic_exact": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "citation_valid": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "grounded_quote": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "abstained": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "unsupported_answer": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        }
+      },
+      "wall_seconds": 19.366742416001216,
+      "mlx_peak_mib": 353.7089614868164,
+      "wall_seconds_including_interrupted_segments": 19.331,
+      "wall_seconds_note": "wall_seconds in the evaluator summary is the final segment only when resumed"
+    },
+    "adapter_rag": {
+      "status": "complete",
+      "planned_cases": 24,
+      "metrics": {
+        "n": 24,
+        "json_valid": {
+          "count": 2,
+          "total": 24,
+          "rate": 0.08333333333333333
+        },
+        "schema_valid": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        },
+        "semantic_exact": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        },
+        "citation_valid": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        },
+        "grounded_quote": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        },
+        "abstained": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        },
+        "unsupported_answer": {
+          "count": 0,
+          "total": 24,
+          "rate": 0.0
+        }
+      },
+      "supported": {
+        "n": 16,
+        "json_valid": {
+          "count": 2,
+          "total": 16,
+          "rate": 0.125
+        },
+        "schema_valid": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "semantic_exact": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "citation_valid": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "grounded_quote": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "abstained": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        },
+        "unsupported_answer": {
+          "count": 0,
+          "total": 16,
+          "rate": 0.0
+        }
+      },
+      "abstention_cases": {
+        "n": 8,
+        "json_valid": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "schema_valid": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "semantic_exact": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "citation_valid": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "grounded_quote": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "abstained": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        },
+        "unsupported_answer": {
+          "count": 0,
+          "total": 8,
+          "rate": 0.0
+        }
+      },
+      "wall_seconds": 8.989846083000884,
+      "mlx_peak_mib": 345.2168312072754,
+      "wall_seconds_including_interrupted_segments": 15.43,
+      "wall_seconds_note": "wall_seconds in the evaluator summary is the final segment only when resumed"
+    }
+  },
+  "training": {
+    "status": "completed",
+    "steps": 40,
+    "wall_seconds": 23.73928245800198,
+    "mlx_peak_mib": 471.5247631072998,
+    "max_sequence_tokens": 285,
+    "trainable_parameters": 325632,
+    "adapter_bytes": 1308381,
+    "adapter_sha256": "57e55d24ab0c3c2cbe5a046bdf2381fc28bb04afc594744cb7b50f09995840eb"
+  },
+  "stopped_training_attempt": {
+    "status": "stopped_by_resource_guard",
+    "completed_updates": 59,
+    "saved_adapter": false,
+    "stop_elapsed_seconds": 39.402,
+    "min_free_percent": 31,
+    "max_rss_mib": 391.41,
+    "system_swapout_delta_mib": 289.5,
+    "reason": "Global system swap-out growth exceeded 64 MiB; attribution to training is unknown",
+    "followup": "One 40-update retry only if preflight is quiet; same data/model, checkpoints every 10 updates"
+  },
+  "corpus_summary": {
+    "active_documents": 142,
+    "selected_documents": 12,
+    "selected_pii_pattern_matches": 0,
+    "excluded_identifier_pattern_documents": 2,
+    "source_counts": {
+      "train": 6,
+      "valid": 2,
+      "test": 4
+    },
+    "split_counts": {
+      "train": 144,
+      "valid": 16,
+      "test": 24
+    },
+    "screen_limit": "Regex screen and publisher-reference-only selection; not proof of absence of all identifiers"
+  },
+  "resources": {
+    "base_rag": {
+      "min_free_percent": 33,
+      "max_rss_mib": 403.31,
+      "episodes": [
+        {
+          "elapsed_seconds": 19.331,
+          "system_swapout_growth_mib": 0.0
+        }
+      ],
+      "thermal_status": "No warning recorded in sampled pmset output; actual temperature unknown"
+    },
+    "train": {
+      "min_free_percent": 31,
+      "max_rss_mib": 418.97,
+      "episodes": [
+        {
+          "elapsed_seconds": 23.737,
+          "system_swapout_growth_mib": 0.0
+        }
+      ],
+      "thermal_status": "No warning recorded in sampled pmset output; actual temperature unknown"
+    },
+    "adapter_rag": {
+      "min_free_percent": 29,
+      "max_rss_mib": 400.91,
+      "episodes": [
+        {
+          "elapsed_seconds": 6.478,
+          "system_swapout_growth_mib": 181.6875
+        },
+        {
+          "elapsed_seconds": 8.952,
+          "system_swapout_growth_mib": 0.0
+        }
+      ],
+      "thermal_status": "No warning recorded in sampled pmset output; actual temperature unknown"
+    }
+  },
+  "qualitative_failures": {
+    "base_rag": {
+      "condition": "base_rag",
+      "categories": {
+        "unstructured_prose_or_echo": 24
+      },
+      "target_ending_in_unstructured_output": 15,
+      "n": 24,
+      "note": "Substring occurrence does not count as a correct structured answer or validate medical reasoning"
+    },
+    "adapter_rag": {
+      "condition": "adapter_rag",
+      "categories": {
+        "invalid_or_wrong_schema_json": 24
+      },
+      "target_ending_in_unstructured_output": 0,
+      "n": 24,
+      "note": "Substring occurrence does not count as a correct structured answer or validate medical reasoning",
+      "schema_failure_reasons": {
+        "JSON parse failure": 22,
+        "Inconsistent abstention/citation": 1,
+        "Invalid citation label": 1
+      }
+    }
+  },
+  "model": {
+    "name": "HuggingFaceTB/SmolLM2-135M-Instruct",
+    "revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+    "license": "Apache-2.0"
+  },
+  "limitations": [
+    "Cloze questions expose the beginning of the target sentence; lexical matching is intentionally strong.",
+    "Each supported model prompt receives two excerpts including the gold sentence; corpus retrieval recall is not measured.",
+    "Exact target completion is a narrow factual proxy. No clinician reviewed answers or clinical reasoning.",
+    "Source documents and exact snippets are disjoint across train/validation/test; shared terminology and semantic overlap can remain.",
+    "The model saw 40 updates in the saved run; no checkpoint or hyperparameter was selected on held-out outcomes.",
+    "System-wide swap counters include other tasks; no claim of experiment-wide zero swapping.",
+    "Publisher copyrights retained. Source freshness and clinical conflicts not independently resolved."
+  ],
+  "privacy": "No corpus text, source document titles, examples, predictions, or weights included in this report"
+}

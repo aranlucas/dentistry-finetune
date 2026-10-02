@@ -1,0 +1,14 @@
+{
+  "chip": "Apple M5",
+  "unified_memory_gib": 16,
+  "cpu_cores": 10,
+  "gpu_cores": 10,
+  "architecture": "arm64",
+  "os": "macOS 27.0.1",
+  "free_disk_gib_at_start": 273,
+  "memory_free_percent_at_start": 34,
+  "preexisting_swap_used_mib": 22216.38,
+  "sharing_machine": true,
+  "thermal_measurement": "pmset warning status; actual temperature not measured",
+  "privacy": "No hardware serial number, UUID, process list, or document content included"
+}

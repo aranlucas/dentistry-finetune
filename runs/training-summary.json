@@ -1,0 +1,10 @@
+{
+  "status": "completed",
+  "steps": 40,
+  "wall_seconds": 23.73928245800198,
+  "mlx_peak_mib": 471.5247631072998,
+  "max_sequence_tokens": 285,
+  "trainable_parameters": 325632,
+  "adapter_bytes": 1308381,
+  "adapter_sha256": "57e55d24ab0c3c2cbe5a046bdf2381fc28bb04afc594744cb7b50f09995840eb"
+}
