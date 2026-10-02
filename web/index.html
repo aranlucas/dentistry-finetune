@@ -15,7 +15,7 @@
 <label for="note">Study note</label><textarea id="note" maxlength="240">Supply the exact missing ending for review: The blue lamp</textarea>
 <div class="split"><div><label for="s1">Excerpt S1</label><textarea id="s1" maxlength="450">The blue lamp is on the desk.</textarea></div><div><label for="s2">Excerpt S2</label><textarea id="s2" maxlength="450">The red coat is by the door.</textarea></div></div>
 <div class="controls"><button id="run" class="primary">Complete note locally</button><button id="missing">Remove excerpts</button></div><pre id="output">Results will appear here.</pre><div class="meta" id="status" role="status"></div></section>
-<footer>Study formatting and extractive grounding only. This tiny cloze benchmark does not measure oral-board reasoning or medical reliability. Verify the original source and its revision date; never use this demo for patient care. Source documents, examples, raw predictions, and weights stay local.</footer>
+<footer>Study formatting and extractive grounding only. This tiny cloze benchmark does not measure oral-board reasoning or medical reliability. Verify the original source and its revision date; never use this demo for patient care. Original documents, raw predictions, and weights stay local. The original generated pilot datasets are shared in the private repository at the user's explicit request.</footer>
 </main><script>
 const $=id=>document.getElementById(id);let samples=[],sampleIndex=0;
 const names={retrieval:'Lexical extraction',base_rag:'Base + excerpts',adapter_rag:'LoRA + excerpts',adapter_closed:'LoRA without excerpts'};
