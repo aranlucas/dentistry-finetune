@@ -2,7 +2,7 @@
 
 A bounded Apple Silicon LoRA experiment using local oral-board reference documents. It trains a tiny model to complete a short study note from supplied excerpts, cite the matching excerpt, and abstain when evidence is absent. It also provides a stronger deterministic lexical extraction baseline.
 
-**This is a study formatting/grounding pilot, not a clinical assistant or a test of general oral-board competence.** No source documents, excerpts, training examples, raw predictions, or adapter/model weights are included in this repository. No inference or embedding APIs are used.
+**This is a study formatting/grounding pilot, not a clinical assistant or a test of general oral-board competence.** At the user's explicit request, the original generated train/validation/test datasets, containing short source excerpts, and provenance are included in this private repository under [`datasets/pilot-v1`](datasets/pilot-v1/DATASET_CARD.md). Original source PDFs/full corpus, raw predictions, and adapter/model weights remain local. No inference or embedding APIs are used.
 
 ## What was run
 
@@ -52,6 +52,10 @@ Open `http://127.0.0.1:8765`. The demo starts with harmless synthetic text and c
 
 Frozen data and predictions refuse overwriting. For an evaluation interrupted by the resource guard, use `--resume` with `src/evaluate.py` or `src/bounded.py`; this continues only missing cases and checks the model/adapter/data/decoding fingerprint. It never gives an already-generated answer a second chance. Use a new experiment directory to change data, prompts, hyperparameters, or model weights.
 
+Resuming an already-complete evaluation returns its saved summary without loading the model, checking Mac resource counters, or replacing its original timing. If all predictions were saved but the final summary was interrupted, resume reconstructs metrics with unknown timing/memory explicitly marked unavailable. A missing original fingerprint or a runtime prompt that differs from frozen messages is rejected before inference.
+
+Hosted CI runs standard-library synthetic contract/resume tests, approved dataset byte/hash/privacy checks, and Python compilation. It never downloads a model, trains, reads the full source corpus, or uploads local runtime files. Run its checks locally with `python3 src/checks.py` and `PYTHONPATH=src python3 -m unittest discover -s tests -v`. The original local corpus integrity test is skipped on CI because that corpus is deliberately absent; the versioned approved snapshot is verified separately.
+
 The observed initial stopped attempt is a historical artifact; a fresh reproduction normally performs the shorter saved run only. `report.py` reads the historical stopped summary if present and otherwise marks it absent. No training/evaluation data are required for the code's synthetic contract tests; local split checks run when data exist.
 
 ## What the evaluation means
@@ -68,6 +72,6 @@ The run checks macOS available-memory percentage, process RSS, `vm_stat` swap-ou
 
 Public publisher references are selected from the existing active corpus. Identifier-field forms are excluded. Selected references had no matches for MRN/patient-name/SSN/DOB patterns; this is a limited regex screen, not proof that all identifiers are absent. Tables, figure OCR, numeric statements, references, and apparent contact information are excluded from training snippets. No real patient records or private notes/email/code enter training.
 
-The documents retain publisher copyright, and no open document license was verified. The user authorized local study use; no redistribution permission is inferred. Do not distribute documents, derived examples, raw predictions, or weights without separate permission and a rights review. Source freshness and clinical conflicts were not independently resolved. See [`docs/UPSTREAM.md`](docs/UPSTREAM.md).
+The documents retain publisher copyright, and no open document license was verified. The user authorized local study use and subsequently the private `pilot-v1` dataset snapshot. No general redistribution permission or dataset license is inferred. Do not make the source-derived datasets public or redistribute/relicense them without a rights review and any required permission. Original documents, raw predictions, and weights remain local. Source freshness and clinical conflicts were not independently resolved. See [`docs/UPSTREAM.md`](docs/UPSTREAM.md) and the [dataset card](datasets/pilot-v1/DATASET_CARD.md).
 
-Only `src/export_source.py`'s explicit allowlist is intended for GitHub: authored source/configuration, model provenance, and aggregate metrics. The export checks selected titles, URLs, and exact source sentences for accidental inclusion. Its archive is a code bundle; the local adapter remains on the Mac. Git ignores all training data, raw predictions, downloaded weights, adapters, local screenshots, and model caches.
+Only `src/export_source.py`'s explicit allowlist is intended for GitHub: authored source/configuration, model provenance, aggregate metrics, and the six approved files under `datasets/pilot-v1`. The export still checks other files for accidental inclusion of selected titles, URLs, and exact source sentences. Its archive now includes the explicitly approved dataset snapshot; the adapter remains on the Mac. Git ignores runtime training data, future unapproved dataset versions, raw predictions, downloaded weights, adapters, local screenshots, and model caches. Original dataset JSONL bytes/counts/hashes are frozen; use a separate version for any improved board-style QA dataset.

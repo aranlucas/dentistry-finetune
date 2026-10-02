@@ -13,6 +13,17 @@ web/screenshots/
 
 .local/
 data/
+# Generated runtime data stays local. Only the explicitly approved immutable
+# snapshot under datasets/pilot-v1 is versioned; do not stage future exports.
+datasets/*
+!datasets/pilot-v1/
+datasets/pilot-v1/*
+!datasets/pilot-v1/train.jsonl
+!datasets/pilot-v1/valid.jsonl
+!datasets/pilot-v1/heldout.jsonl
+!datasets/pilot-v1/manifest.json
+!datasets/pilot-v1/INTEGRITY.json
+!datasets/pilot-v1/DATASET_CARD.md
 runs/*
 !runs/results.json
 !runs/training-summary.json

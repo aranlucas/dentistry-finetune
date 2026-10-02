@@ -1,0 +1,18 @@
+{
+  "train.jsonl": {
+    "bytes": 308448,
+    "sha256": "b70a2551362787a2462e0326317477a5f03ab8e249ccdf2b5e4b0cc5c6447aee"
+  },
+  "heldout.jsonl": {
+    "bytes": 50790,
+    "sha256": "16dff9db82d62783800377881505ccfcc47e9ed27e96a5b5d6173859ef4242bf"
+  },
+  "manifest.json": {
+    "bytes": 9400,
+    "sha256": "139ad5407203e8a68492ee4ef5972884619aba079cbbef5d8ba1934768618296"
+  },
+  "valid.jsonl": {
+    "bytes": 32965,
+    "sha256": "a20a13841e289e93082ca009f5ee229267229985c62883d2241f93d1075e1592"
+  }
+}
