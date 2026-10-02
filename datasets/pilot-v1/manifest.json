@@ -1,0 +1,190 @@
+{
+  "seed": 20261002,
+  "templates": {
+    "train": [
+      "Complete this study note: {prefix}",
+      "Finish the source sentence: {prefix}",
+      "Fill in the omitted ending: {prefix}"
+    ],
+    "valid": [
+      "What words finish this source note? {prefix}"
+    ],
+    "test": [
+      "Supply the exact missing ending for review: {prefix}",
+      "For my practice notes, complete the citation-backed sentence: {prefix}"
+    ]
+  },
+  "documents": [
+    {
+      "local_id": 191,
+      "title": "Use of Antibiotic Therapy for Pediatric Dental Patients",
+      "path": "markdown/www.aapd.org/bp_antibiotictherapy26-83f529919c0d.md",
+      "content_hash": "61c42131f4ca9087f62e3fecedf81a9ef283dabcd77b1ae7cc99c0243a0e6cd8",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_antibiotictherapy26.pdf",
+      "pdf_sha256": "c217c7487d3124afe76dfed3e94e9316587ad4943eb39cf363346cfb23f1cc6f",
+      "split": "train",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 49
+    },
+    {
+      "local_id": 192,
+      "title": "Behavior Guidance for the Pediatric Dental Patient",
+      "path": "markdown/www.aapd.org/bp_behavguide25-049ca74c7028.md",
+      "content_hash": "c58830fb0e393ae155333a922c503bd61db3b9625be12d771a87e06e0f056bc4",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_behavguide25.pdf",
+      "pdf_sha256": "e5eabd3c18e93306753217a6bddc811707ccef15ed4b6bb6af93ecf83a853b86",
+      "split": "train",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 211
+    },
+    {
+      "local_id": 194,
+      "title": "Caries-Risk Assessment and Management for Infants, Children, and Adolescents",
+      "path": "markdown/www.aapd.org/bp_cariesriskassessment25-951a425d804a.md",
+      "content_hash": "2589cfc0dea8b469bffe1ed5822c9b9bde4a1a5282a375ca9be8e91487e817d5",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_cariesriskassessment25.pdf",
+      "pdf_sha256": "0f9d004a503562f3ae4d4ce6f05be78f41e35a4120ba9e5f44b9ed360a1d196a",
+      "split": "train",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 31
+    },
+    {
+      "local_id": 196,
+      "title": "Management of the Developing Dentition and Occlusion in Pediatric Dentistry",
+      "path": "markdown/www.aapd.org/bp_developdentition25-cde5dd5c0958.md",
+      "content_hash": "72a3edb467ace269f3e0a93e163ebab5d3a7aeaae4ef39eb54add5b3ff54ad41",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_developdentition25.pdf",
+      "pdf_sha256": "f0b950bc8d023959efc04796522fb4599aa4f26392bc46d8f367defe26228ad0",
+      "split": "train",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 189
+    },
+    {
+      "local_id": 200,
+      "title": "Informed Consent",
+      "path": "markdown/www.aapd.org/bp_informedconsent25-6bb698880547.md",
+      "content_hash": "269d096b4e53e8d02b28872ebacc7a0071fe7a1604a0084f2fad3360c90875f0",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_informedconsent25.pdf",
+      "pdf_sha256": "319772ab685a18fd3b5ccc12908ab25a66258c42ce80b1b28f363dc0e115e613",
+      "split": "train",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 63
+    },
+    {
+      "local_id": 213,
+      "title": "Use of Protective Stabilization for Pediatric Dental Patients",
+      "path": "markdown/www.aapd.org/bp_protective25-92db2b56e749.md",
+      "content_hash": "2945cd4121e87c8dce32479e52e72d674f24eed87d5631472c0f26d48a1e4db5",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_protective25.pdf",
+      "pdf_sha256": "378150e0d38feb60a775ae90de7f8fc43d9bdfe679a8c8359c80b1faa434bc66",
+      "split": "train",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 62
+    },
+    {
+      "local_id": 197,
+      "title": "Fluoride Therapy",
+      "path": "markdown/www.aapd.org/bp_fluoridetherapy25-fd34702d94cb.md",
+      "content_hash": "b1702e6f2bf4f80d48d20f70f323729b6a008b4ad5b3582b45462357505e50a9",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_fluoridetherapy25.pdf",
+      "pdf_sha256": "f4853b8bcca035d62dd746cdd9f1cce5f82435224309f942f7882e546b2f0a37",
+      "split": "valid",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 31
+    },
+    {
+      "local_id": 253,
+      "title": "Policy on Nutrition and Dietary Counseling in the Pediatric Dental Setting",
+      "path": "markdown/www.aapd.org/p_dietary26-627b1a0e49da.md",
+      "content_hash": "f8b5c5266d66156ebcb97b5bcc1e3d35d8d684c86f1b4a06e4e3f2253fa2d3f5",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/p_dietary26.pdf",
+      "pdf_sha256": "37b0b04cc5bea2d15a16de5f72d1dabd11089113534162347a93e8cdfb038b88",
+      "split": "valid",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 40
+    },
+    {
+      "local_id": 207,
+      "title": "Acute Pain Management for Pediatric Dental Patients",
+      "path": "markdown/www.aapd.org/bp_pain26-c9a7b708a316.md",
+      "content_hash": "592d40ecbc40270432480c90cc66f11c784e8798f28c7e13e9b3afb387970b32",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_pain26.pdf",
+      "pdf_sha256": "f9aa23450ea919582962df8bf3ecb45fe176b85f511688012118839787b3ae41",
+      "split": "test",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 99
+    },
+    {
+      "local_id": 210,
+      "title": "Periodontal Conditions in Pediatric Dental Patients",
+      "path": "markdown/www.aapd.org/bp_periotherapy25-a8ece7455d5c.md",
+      "content_hash": "490391e1aef61b9d54c846bc5bde9ba30bd69226e1f367410c13f9d77fce63f1",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_periotherapy25.pdf",
+      "pdf_sha256": "bc01367c8962cd3aaf5e7a815aafcb4137c570bc6648481c833dba330dcd3296",
+      "split": "test",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 128
+    },
+    {
+      "local_id": 214,
+      "title": "Pulp Therapy for Primary and Immature Permanent Teeth: Indications and Objectives",
+      "path": "markdown/www.aapd.org/bp_pulptherapy26-57cd959220f2.md",
+      "content_hash": "e71eebce161e22dcea7bc6f2ed22406eef9d176281e235dd7cdbd3e9a7206ea7",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_pulptherapy26.pdf",
+      "pdf_sha256": "c9b8b43afc768ba4220035d63939585d025dddc4d38f4e27ee07e3b078091e14",
+      "split": "test",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 124
+    },
+    {
+      "local_id": 218,
+      "title": "Pediatric Restorative Dentistry",
+      "path": "markdown/www.aapd.org/bp_restorativedent25-bf56e976b2d0.md",
+      "content_hash": "c0b0b0d8c8d87919e03ba4995d35962c2ecd37db5f90c15b2b74e738f17a28a7",
+      "publisher_url": "https://www.aapd.org/globalassets/media/policies_guidelines/bp_restorativedent25.pdf",
+      "pdf_sha256": "a67287379a65a18a8d8b357616f40cb753e0847f2114e17c398dda9be4383f31",
+      "split": "test",
+      "pii_screen_flags": [],
+      "license": "Publisher copyright; no open license verified; local study only",
+      "available_screened_sentences": 120
+    }
+  ],
+  "splits": {
+    "train": {
+      "file": "train.jsonl",
+      "count": 144,
+      "sha256": "b70a2551362787a2462e0326317477a5f03ab8e249ccdf2b5e4b0cc5c6447aee"
+    },
+    "valid": {
+      "file": "valid.jsonl",
+      "count": 16,
+      "sha256": "a20a13841e289e93082ca009f5ee229267229985c62883d2241f93d1075e1592"
+    },
+    "test": {
+      "file": "heldout.jsonl",
+      "count": 24,
+      "sha256": "16dff9db82d62783800377881505ccfcc47e9ed27e96a5b5d6173859ef4242bf"
+    }
+  },
+  "source_db_sha256": "db3edfb7d4b4f4c5d1d83e97e5ce4293455198cfae7add23f8399864726d8b53",
+  "training_text_leaves_mac": true,
+  "rights": "Publisher copyrights retained; no open document license or general redistribution permission verified. User explicitly requested this private dataset snapshot; do not infer rights for reuse or public redistribution.",
+  "original_local_manifest_sha256": "625eebb28cba8f0cf6847446ab448360b0317957ce393635454331cd5a62989e",
+  "authorized_export": {
+    "destination": "existing private GitHub repository",
+    "scope": "generated pilot-v1 datasets and source/split provenance only",
+    "raw_source_pdfs_included": false,
+    "weights_included": false
+  }
+}

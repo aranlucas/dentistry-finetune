@@ -1,4 +1,4 @@
-name: Code-only checks
+name: Offline integrity checks
 
 on:
   pull_request:
@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.12'
-      - name: Confirm private runtime artifacts are absent
+      - name: Confirm only the approved dataset snapshot is present
         run: |
           python - <<'PY'
           import subprocess
@@ -29,10 +29,14 @@ jobs:
           forbidden = ('data/', 'models/', 'adapters/', '.local/', '.hf-cache/', '.venv/')
           assert not any(path.startswith(forbidden) for path in files)
           assert not any(path.endswith(('.safetensors', '.gguf', '.sqlite', '.bin')) for path in files)
+          approved = {'datasets/pilot-v1/' + name for name in
+                      ['train.jsonl', 'valid.jsonl', 'heldout.jsonl', 'manifest.json',
+                       'INTEGRITY.json', 'DATASET_CARD.md']}
+          assert {path for path in files if path.startswith('datasets/')} == approved
           PY
       - name: Synthetic contract checks (local corpus test skipped)
         run: python src/checks.py
-      - name: Immutable resume regression checks
+      - name: Immutable resume and approved dataset integrity checks
         run: PYTHONPATH=src python -m unittest discover -s tests -v
       - name: Compile source
         run: python -m compileall -q src tests
