@@ -32,10 +32,9 @@ Adapter evaluation initially stopped before generation, then stopped after nine 
 
 ## Reproduce locally
 
-Requires an Apple Silicon Mac and an authorized local copy of the oral-board reference database. The development launcher also needs Make and Node.js 24 or newer. Keep one model job running at a time. The example source database is read-only; the original repository is not modified.
+Requires an Apple Silicon Mac and an authorized local copy of the oral-board reference database. Keep one model job running at a time. The example source database is read-only; the original repository is not modified.
 
 ```sh
-npm install -g portless@0.15.7
 uv venv .venv --python 3.12
 uv pip install --python .venv/bin/python -r requirements.lock
 .venv/bin/python src/download_model.py
@@ -49,7 +48,7 @@ nice -n 10 .venv/bin/python src/bounded.py evaluate --condition adapter_rag
 make dev
 ```
 
-Open `https://oral-board-local-lab.localhost`. The demo starts with harmless synthetic text and can load a local study excerpt pair. It runs at most one inference at a time in a short-lived process, releases model memory afterward, logs no request/answer text, and binds only to loopback. It enforces host/origin checks and does not load external scripts or fonts. Use lexical extraction when model inference is resource-blocked.
+Open `https://oral-board-local-lab.localhost`; `make dev` runs the server through [Portless](https://github.com/vercel-labs/portless) (`npm install -g portless`), whose first run may ask for `sudo` to bind port 443 and trust a local certificate. The demo starts with harmless synthetic text and can load a local study excerpt pair. It runs at most one inference at a time in a short-lived process, releases model memory afterward, logs no request/answer text, and binds only to loopback. It enforces host/origin checks and does not load external scripts or fonts. Use lexical extraction when model inference is resource-blocked.
 
 `make_data.py` selects twelve active publisher references by local database IDs. For another database version, pass `--selection /path/to/local-selection.json` mapping `train`, `valid`, and `test` to nonoverlapping active IDs. Review the selected sources locally first. Corpus metadata and provenance stay in the ignored local manifest.
 
@@ -60,28 +59,6 @@ Resuming an already-complete evaluation returns its saved summary without loadin
 Hosted CI runs standard-library synthetic contract/resume tests, approved dataset byte/hash/privacy checks, and Python compilation. It never downloads a model, trains, reads the full source corpus, or uploads local runtime files. Run its checks locally with `python3 src/checks.py` and `PYTHONPATH=src python3 -m unittest discover -s tests -v`. The original local corpus integrity test is skipped on CI because that corpus is deliberately absent; the versioned approved snapshot is verified separately.
 
 The observed initial stopped attempt is a historical artifact; a fresh reproduction normally performs the shorter saved run only. `report.py` reads the historical stopped summary if present and otherwise marks it absent. No training/evaluation data are required for the code's synthetic contract tests; local split checks run when data exist.
-
-### Development commands
-
-`make dev` exposes the local demo through
-[Portless](https://github.com/vercel-labs/portless/tree/v0.15.7).
-Open `https://oral-board-local-lab.localhost`, or the printed URL.
-The Makefile's `PYTHON` variable defaults to `.venv/bin/python` and can select
-another prepared environment.
-
-Linked Git worktrees receive a branch-prefixed hostname. Portless supplies
-`PORT` and `PORTLESS_URL`; the server accepts only that exact proxy origin in
-addition to its ordinary loopback origins. It continues binding to
-`127.0.0.1`, enforcing Host/Origin checks, and using the same local inference and
-resource guards. This demo accepts only `.localhost` proxy origins.
-
-Portless starts a shared HTTPS proxy and may request local administrator access on
-first use to bind port 443 and trust its development certificate. Use the URL it
-prints if your proxy uses a custom port or domain. Stop the command with Ctrl+C;
-`portless doctor` checks local proxy, certificate, and DNS setup.
-
-A proxy URL does not create separate datasets, model weights, or experiment
-state; the existing local-data and one-job-at-a-time rules still apply.
 
 ## What the evaluation means
 

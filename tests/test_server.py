@@ -60,23 +60,6 @@ class ServerOriginTests(unittest.TestCase):
         self.assertEqual(self.request(httpd, 'other.oral-board-local-lab.localhost:1355', origin), 403)
         self.assertEqual(self.request(httpd, 'fix-ui.oral-board-local-lab.localhost', origin), 403)
 
-    def test_invalid_proxy_origins_are_rejected_before_binding(self):
-        for origin in [
-            'https://example.com',
-            'https://oral-board-local-lab.local',
-            'ftp://oral-board-local-lab.localhost',
-            'https://user@oral-board-local-lab.localhost',
-            'https://oral-board-local-lab.localhost/path',
-            'https://oral-board-local-lab.localhost?query=1',
-            'https://oral-board-local-lab.localhost#fragment',
-            'https://oral-board-local-lab.localhost:0',
-            'https://oral-board-local-lab.localhost:65536',
-            'https://oral-board-local-lab.localhost:invalid',
-        ]:
-            with self.subTest(origin=origin):
-                with self.assertRaises(ValueError):
-                    make_server(0, origin)
-
 
 if __name__ == '__main__':
     unittest.main()

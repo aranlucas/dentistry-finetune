@@ -54,40 +54,16 @@ class Handler(BaseHTTPRequestHandler):
         except (ValueError,OSError):return self.send(400,b'{"error":"Invalid local request"}')
         finally:BUSY.release()
 
-def make_server(port, portless_url=None):
-    """Accept one explicit local proxy origin while retaining loopback binding."""
-    proxy_origin = None
-    if portless_url:
-        parsed = urlparse(portless_url)
-        if (parsed.scheme not in {'http', 'https'} or
-                not parsed.hostname or not parsed.hostname.endswith('.localhost') or
-                parsed.username is not None or parsed.password is not None or
-                parsed.path not in {'', '/'} or parsed.params or parsed.query or parsed.fragment):
-            raise ValueError('PORTLESS_URL must be an HTTP(S) .localhost origin')
-        proxy_port = parsed.port
-        if proxy_port is not None and not 1 <= proxy_port <= 65535:
-            raise ValueError('PORTLESS_URL must use a valid port')
-        authority = parsed.hostname
-        if proxy_port is not None and proxy_port != {'http': 80, 'https': 443}[parsed.scheme]:
-            authority += f':{proxy_port}'
-        proxy_origin = f'{parsed.scheme}://{authority}'
-
-    httpd = ThreadingHTTPServer(('127.0.0.1', port), Handler)
-    httpd.allowed_origins = {
-        f'http://127.0.0.1:{httpd.server_port}',
-        f'http://localhost:{httpd.server_port}',
-    }
-    if proxy_origin:
-        httpd.allowed_origins.add(proxy_origin)
-    httpd.allowed_hosts = {urlparse(origin).netloc for origin in httpd.allowed_origins}
+def make_server(port, proxy_url=None):
+    """Bind loopback only; also accept the Portless origin when one is assigned."""
+    httpd=ThreadingHTTPServer(('127.0.0.1',port),Handler)
+    httpd.allowed_origins={f'http://127.0.0.1:{httpd.server_port}',f'http://localhost:{httpd.server_port}'}
+    if proxy_url:httpd.allowed_origins.add(proxy_url.rstrip('/'))
+    httpd.allowed_hosts={urlparse(origin).netloc for origin in httpd.allowed_origins}
     return httpd
 
-
 if __name__=='__main__':
-    ap=argparse.ArgumentParser();ap.add_argument('--port',type=int,default=os.environ.get('PORT','8765'));args=ap.parse_args()
-    try:
-        httpd=make_server(args.port,os.environ.get('PORTLESS_URL'))
-    except ValueError as error:
-        ap.error(str(error))
+    ap=argparse.ArgumentParser();ap.add_argument('--port',type=int,default=int(os.environ.get('PORT','8765')));args=ap.parse_args()
+    httpd=make_server(args.port,os.environ.get('PORTLESS_URL'))
     print(f'Local study lab: {os.environ.get("PORTLESS_URL") or f"http://127.0.0.1:{httpd.server_port}"}',flush=True)
     httpd.serve_forever()
