@@ -60,6 +60,31 @@ Hosted CI runs standard-library synthetic contract/resume tests, approved datase
 
 The observed initial stopped attempt is a historical artifact; a fresh reproduction normally performs the shorter saved run only. `report.py` reads the historical stopped summary if present and otherwise marks it absent. No training/evaluation data are required for the code's synthetic contract tests; local split checks run when data exist.
 
+### Named local URL (optional)
+
+Install [Portless](https://github.com/vercel-labs/portless/tree/v0.15.7) with
+Node.js 24 or newer, then run the same local demo through its proxy:
+
+```sh
+npm install -g portless@0.15.7
+portless run --name oral-board-local-lab .venv/bin/python src/server.py
+```
+
+Open `https://oral-board-local-lab.localhost`, or the URL printed by Portless.
+Linked Git worktrees receive a branch-prefixed hostname. Portless supplies
+`PORT` and `PORTLESS_URL`; the server accepts only that exact proxy origin in
+addition to its ordinary loopback origins. It continues binding to
+`127.0.0.1`, enforcing Host/Origin checks, and using the same local inference and
+resource guards. This demo intentionally accepts only `.localhost` proxy
+origins; custom domains and LAN URLs are outside its local-only setup.
+
+First use may request local administrator access for port 443 and the development
+certificate. Stop the command with Ctrl+C. `portless doctor` checks proxy,
+certificate, and DNS setup. The original
+`.venv/bin/python src/server.py --port 8765` command remains available.
+A proxy URL does not create separate datasets, model weights, or experiment
+state; the existing local-data and one-job-at-a-time rules still apply.
+
 ## What the evaluation means
 
 The questions ask for the omitted ending of a source sentence. Each supported model prompt receives two candidate excerpts, including the target sentence. Retrieval uses the quoted sentence prefix to select and extract the exact ending; it does not read gold labels. Its very strong score is expected for this narrow task. Full-corpus retrieval recall, paraphrase reasoning, medical validity, and real exam performance are not measured.
