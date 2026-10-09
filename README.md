@@ -66,10 +66,8 @@ The observed initial stopped attempt is a historical artifact; a fresh reproduct
 `make dev` exposes the local demo through
 [Portless](https://github.com/vercel-labs/portless/tree/v0.15.7).
 Open `https://oral-board-local-lab.localhost`, or the printed URL.
-Use `make dev-direct` for the original
-`.venv/bin/python src/server.py --port 8765` command at
-`http://127.0.0.1:8765`. The Makefile's `PYTHON` variable defaults to
-`.venv/bin/python` and can select another prepared environment.
+The Makefile's `PYTHON` variable defaults to `.venv/bin/python` and can select
+another prepared environment.
 
 Linked Git worktrees receive a branch-prefixed hostname. Portless supplies
 `PORT` and `PORTLESS_URL`; the server accepts only that exact proxy origin in

@@ -1,9 +1,6 @@
 PYTHON ?= .venv/bin/python
 
-.PHONY: dev dev-direct
+.PHONY: dev
 
 dev:
 	portless run --name oral-board-local-lab $(PYTHON) src/server.py
-
-dev-direct:
-	$(PYTHON) src/server.py --port 8765
