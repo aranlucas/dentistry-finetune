@@ -32,9 +32,10 @@ Adapter evaluation initially stopped before generation, then stopped after nine 
 
 ## Reproduce locally
 
-Requires an Apple Silicon Mac and an authorized local copy of the oral-board reference database. Keep one model job running at a time. The example source database is read-only; the original repository is not modified.
+Requires an Apple Silicon Mac and an authorized local copy of the oral-board reference database. The development launcher also needs Make and Node.js 24 or newer. Keep one model job running at a time. The example source database is read-only; the original repository is not modified.
 
 ```sh
+npm install -g portless@0.15.7
 uv venv .venv --python 3.12
 uv pip install --python .venv/bin/python -r requirements.lock
 .venv/bin/python src/download_model.py
@@ -45,10 +46,10 @@ nice -n 10 .venv/bin/python src/bounded.py evaluate --condition base_rag
 nice -n 10 .venv/bin/python src/bounded.py train
 nice -n 10 .venv/bin/python src/bounded.py evaluate --condition adapter_rag
 .venv/bin/python src/report.py
-.venv/bin/python src/server.py --port 8765
+make dev
 ```
 
-Open `http://127.0.0.1:8765`. The demo starts with harmless synthetic text and can load a local study excerpt pair. It runs at most one inference at a time in a short-lived process, releases model memory afterward, logs no request/answer text, and binds only to loopback. It enforces host/origin checks and does not load external scripts or fonts. Use lexical extraction when model inference is resource-blocked.
+Open `https://oral-board-local-lab.localhost`. The demo starts with harmless synthetic text and can load a local study excerpt pair. It runs at most one inference at a time in a short-lived process, releases model memory afterward, logs no request/answer text, and binds only to loopback. It enforces host/origin checks and does not load external scripts or fonts. Use lexical extraction when model inference is resource-blocked.
 
 `make_data.py` selects twelve active publisher references by local database IDs. For another database version, pass `--selection /path/to/local-selection.json` mapping `train`, `valid`, and `test` to nonoverlapping active IDs. Review the selected sources locally first. Corpus metadata and provenance stay in the ignored local manifest.
 
@@ -60,28 +61,27 @@ Hosted CI runs standard-library synthetic contract/resume tests, approved datase
 
 The observed initial stopped attempt is a historical artifact; a fresh reproduction normally performs the shorter saved run only. `report.py` reads the historical stopped summary if present and otherwise marks it absent. No training/evaluation data are required for the code's synthetic contract tests; local split checks run when data exist.
 
-### Named local URL (optional)
+### Development commands
 
-Install [Portless](https://github.com/vercel-labs/portless/tree/v0.15.7) with
-Node.js 24 or newer, then run the same local demo through its proxy:
+`make dev` exposes the local demo through
+[Portless](https://github.com/vercel-labs/portless/tree/v0.15.7).
+Open `https://oral-board-local-lab.localhost`, or the printed URL.
+Use `make dev-direct` for the original
+`.venv/bin/python src/server.py --port 8765` command at
+`http://127.0.0.1:8765`. The Makefile's `PYTHON` variable defaults to
+`.venv/bin/python` and can select another prepared environment.
 
-```sh
-npm install -g portless@0.15.7
-portless run --name oral-board-local-lab .venv/bin/python src/server.py
-```
-
-Open `https://oral-board-local-lab.localhost`, or the URL printed by Portless.
 Linked Git worktrees receive a branch-prefixed hostname. Portless supplies
 `PORT` and `PORTLESS_URL`; the server accepts only that exact proxy origin in
 addition to its ordinary loopback origins. It continues binding to
 `127.0.0.1`, enforcing Host/Origin checks, and using the same local inference and
-resource guards. This demo intentionally accepts only `.localhost` proxy
-origins; custom domains and LAN URLs are outside its local-only setup.
+resource guards. This demo accepts only `.localhost` proxy origins.
 
-First use may request local administrator access for port 443 and the development
-certificate. Stop the command with Ctrl+C. `portless doctor` checks proxy,
-certificate, and DNS setup. The original
-`.venv/bin/python src/server.py --port 8765` command remains available.
+Portless starts a shared HTTPS proxy and may request local administrator access on
+first use to bind port 443 and trust its development certificate. Use the URL it
+prints if your proxy uses a custom port or domain. Stop the command with Ctrl+C;
+`portless doctor` checks local proxy, certificate, and DNS setup.
+
 A proxy URL does not create separate datasets, model weights, or experiment
 state; the existing local-data and one-job-at-a-time rules still apply.
 

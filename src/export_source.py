@@ -6,7 +6,7 @@ import zipfile
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
-TOP=['README.md','LICENSE','AGENTS.md','.gitignore','pyproject.toml','requirements.lock']
+TOP=['README.md','Makefile','LICENSE','AGENTS.md','.gitignore','pyproject.toml','requirements.lock']
 AGGREGATE=['runs/results.json','runs/training-summary.json','runs/train-metrics.jsonl']
 APPROVED_DATASET=['datasets/pilot-v1/'+name for name in
                   ['train.jsonl','valid.jsonl','heldout.jsonl','manifest.json','INTEGRITY.json','DATASET_CARD.md']]
