@@ -45,10 +45,10 @@ nice -n 10 .venv/bin/python src/bounded.py evaluate --condition base_rag
 nice -n 10 .venv/bin/python src/bounded.py train
 nice -n 10 .venv/bin/python src/bounded.py evaluate --condition adapter_rag
 .venv/bin/python src/report.py
-.venv/bin/python src/server.py --port 8765
+make dev
 ```
 
-Open `http://127.0.0.1:8765`. The demo starts with harmless synthetic text and can load a local study excerpt pair. It runs at most one inference at a time in a short-lived process, releases model memory afterward, logs no request/answer text, and binds only to loopback. It enforces host/origin checks and does not load external scripts or fonts. Use lexical extraction when model inference is resource-blocked.
+Open `https://oral-board-local-lab.localhost`; `make dev` runs the server through [Portless](https://github.com/vercel-labs/portless) (`npm install -g portless`), whose first run may ask for `sudo` to bind port 443 and trust a local certificate. The demo starts with harmless synthetic text and can load a local study excerpt pair. It runs at most one inference at a time in a short-lived process, releases model memory afterward, logs no request/answer text, and binds only to loopback. It enforces host/origin checks and does not load external scripts or fonts. Use lexical extraction when model inference is resource-blocked.
 
 `make_data.py` selects twelve active publisher references by local database IDs. For another database version, pass `--selection /path/to/local-selection.json` mapping `train`, `valid`, and `test` to nonoverlapping active IDs. Review the selected sources locally first. Corpus metadata and provenance stay in the ignored local manifest.
 

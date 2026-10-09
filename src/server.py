@@ -1,6 +1,7 @@
 """Loopback-only study demo; no source text, requests, or outputs are logged."""
 import argparse
 import json
+import os
 import subprocess
 import sys
 import threading
@@ -22,9 +23,8 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers();self.wfile.write(body)
     def origin_ok(self):
         host=self.headers.get('Host','')
-        allowed={f'127.0.0.1:{self.server.server_port}',f'localhost:{self.server.server_port}'}
         origin=self.headers.get('Origin')
-        return host in allowed and (origin is None or origin in {'http://'+h for h in allowed})
+        return host in self.server.allowed_hosts and (origin is None or origin in self.server.allowed_origins)
     def do_GET(self):
         if not self.origin_ok():return self.send(403,b'{}')
         route=urlparse(self.path).path
@@ -54,8 +54,16 @@ class Handler(BaseHTTPRequestHandler):
         except (ValueError,OSError):return self.send(400,b'{"error":"Invalid local request"}')
         finally:BUSY.release()
 
+def make_server(port, proxy_url=None):
+    """Bind loopback only; also accept the Portless origin when one is assigned."""
+    httpd=ThreadingHTTPServer(('127.0.0.1',port),Handler)
+    httpd.allowed_origins={f'http://127.0.0.1:{httpd.server_port}',f'http://localhost:{httpd.server_port}'}
+    if proxy_url:httpd.allowed_origins.add(proxy_url.rstrip('/'))
+    httpd.allowed_hosts={urlparse(origin).netloc for origin in httpd.allowed_origins}
+    return httpd
+
 if __name__=='__main__':
-    ap=argparse.ArgumentParser();ap.add_argument('--port',type=int,default=8765);args=ap.parse_args()
-    httpd=ThreadingHTTPServer(('127.0.0.1',args.port),Handler)
-    print(f'Local study lab: http://127.0.0.1:{args.port}',flush=True)
+    ap=argparse.ArgumentParser();ap.add_argument('--port',type=int,default=int(os.environ.get('PORT','8765')));args=ap.parse_args()
+    httpd=make_server(args.port,os.environ.get('PORTLESS_URL'))
+    print(f'Local study lab: {os.environ.get("PORTLESS_URL") or f"http://127.0.0.1:{httpd.server_port}"}',flush=True)
     httpd.serve_forever()
