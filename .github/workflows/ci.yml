@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci:
+    runs-on: ${{ vars.LOCAL_CI_ENABLED == 'true' && fromJSON('["self-hosted","linux","x64","omarchy-ci"]') || 'ubuntu-latest' }}
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - parallel:
+          - name: Confirm only the approved dataset snapshot is present
+            run: |
+              python - <<'PY'
+              import subprocess
+              files = subprocess.check_output(['git', 'ls-files'], text=True).splitlines()
+              forbidden = ('data/', 'models/', 'adapters/', '.local/', '.hf-cache/', '.venv/')
+              assert not any(path.startswith(forbidden) for path in files)
+              assert not any(path.endswith(('.safetensors', '.gguf', '.sqlite', '.bin')) for path in files)
+              approved = {'datasets/pilot-v1/' + name for name in
+                          ['train.jsonl', 'valid.jsonl', 'heldout.jsonl', 'manifest.json',
+                           'INTEGRITY.json', 'DATASET_CARD.md']}
+              assert {path for path in files if path.startswith('datasets/')} == approved
+              PY
+
+          - name: Synthetic contract checks
+            run: python src/checks.py
+
+          - name: Test
+            run: PYTHONPATH=src python -m unittest discover -s tests -v
+
+          - name: "Lint: compile source"
+            run: python -m compileall -q src tests
