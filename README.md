@@ -333,13 +333,69 @@ improved dataset needs a new version and its own sharing authorization.
 
 ## Repository layout
 
-| Path | Contents |
-| --- | --- |
-| `src/` | Data preparation, training, evaluation, reporting, the resource guard, the bounded job wrapper, and the local web server |
-| `web/` | The lab website: a Vite + React app (`src/pages/` for the three sheets, `src/components/` for the shared pieces, `src/api.ts` for the zod-checked API); `dist/` and `node_modules/` stay local |
-| `configs/` | Frozen experiment configurations |
-| `docs/` | Upstream licensing notes, hardware, and model provenance |
-| `datasets/pilot-v1/` | The approved, immutable pilot dataset snapshot |
-| `runs/` | The pilot's aggregate metrics and training summary |
-| `examples/transcripts-v1/` | Authored practice transcripts and their bibliographies |
-| `tests/` | Synthetic contract, resume, server, comparison, and transcript tests |
+```text
+.
+├── Makefile                 # make dev, make build, make web-dev
+├── configs/                 # frozen experiment configurations
+│   ├── pilot.json           #   sentence-completion pilot
+│   └── qa-v1.json           #   Dental Q&A
+├── datasets/pilot-v1/       # the approved, immutable pilot dataset snapshot
+├── runs/                    # the pilot's aggregate metrics and training summary
+├── docs/                    # upstream licensing notes, hardware, model provenance
+├── examples/transcripts-v1/ # authored practice transcripts and their bibliographies
+├── src/                     # Python pipeline and the local server
+│   ├── runtime.py           #   shared config; offline-only model loading
+│   ├── resources.py         #   memory, swap and thermal guard (fails closed)
+│   ├── bounded.py           #   runs one low-priority job under a wall-clock deadline
+│   ├── download_model.py    #   public model downloads only
+│   │
+│   ├── make_data.py         #   pilot: extract sources, split by source
+│   ├── task.py              #   pilot: the extractive answer contract and scoring
+│   ├── train.py             #   pilot: LoRA training with resource checks
+│   ├── evaluate.py          #   pilot: keyword baseline, base and fine-tuned answers
+│   ├── report.py            #   pilot: recompute metrics, write aggregates
+│   ├── checks.py            #   pilot: synthetic contract and leakage checks
+│   │
+│   ├── qa_dataset.py        #   Q&A: build the frozen review dataset
+│   ├── oral_dataset_extract.mjs  # Q&A: read-only flashcard extraction
+│   ├── qa.py                #   Q&A: training and evaluation runs
+│   ├── qa_long.py           #   Q&A: resumable three-pass schedule
+│   ├── retry_qa.py          #   Q&A: fresh training attempt on unchanged data
+│   │
+│   ├── curated_dataset.py   #   reviewed answers: freeze authored study rows
+│   ├── grounded.py          #   reviewed answers: frozen publisher excerpts
+│   ├── development.py       #   reviewed answers: base vs fine-tuned comparisons
+│   ├── reference_predict.py #   reviewed answers: one answer given an excerpt
+│   ├── judge_review.py      #   reviewed answers: append-only assistant judgments
+│   ├── answer_review.py     #   reviewed answers: record answer decisions
+│   │
+│   ├── predict.py           #   one local inference request, nothing saved
+│   ├── server.py            #   loopback server: /api routes + the built website
+│   └── export_source.py     #   allowlisted, privacy-checked source export
+├── web/                     # the lab website (Vite + React + TypeScript)
+│   ├── index.html           #   app entry
+│   ├── vite.config.ts       #   build; dev proxy from /api to src/server.py
+│   └── src/
+│       ├── main.tsx         #   React, TanStack Query and Router setup
+│       ├── router.tsx       #   routes /, /qa, /development; run kept in ?run=
+│       ├── api.ts           #   zod schemas and queries for every /api response
+│       ├── styles.css       #   Tailwind theme: colors, type, dark mode
+│       ├── useCaseFocus.ts  #   selection shared by chart and answer reader
+│       ├── format.ts        #   number formatting
+│       ├── pages/           #   one sheet per experiment
+│       │   ├── Pilot.tsx
+│       │   ├── Qa.tsx
+│       │   └── Development.tsx
+│       └── components/      #   shared by all three sheets
+│           ├── Folder.tsx       # tabs and sheet layout
+│           ├── Lead.tsx         # headline, run picker, findings, sections
+│           ├── ResultChart.tsx  # the results chart
+│           ├── Inspector.tsx    # case list and answer reader
+│           ├── Training.tsx     # loss chart and run facts
+│           ├── TryPanel.tsx     # one-request local demo
+│           └── ui.tsx           # buttons, fields, type
+└── tests/                   # synthetic contract, resume, server, comparison, transcript tests
+```
+
+Local-only directories are ignored and never exported: `data/`, `models/`, `adapters/`,
+`.hf-cache/`, `.local/`, raw `runs/` outputs, `web/node_modules/`, and `web/dist/`.
