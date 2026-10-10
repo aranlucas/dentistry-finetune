@@ -20,7 +20,10 @@ def export():
     target.mkdir(parents=True)
     files=[ROOT/name for name in TOP+AGGREGATE]
     files+=list((ROOT/'src').glob('*.py'))+[ROOT/'src/oral_dataset_extract.mjs']+list((ROOT/'configs').glob('*.json'))
-    files+=list((ROOT/'docs').glob('*.json'))+list((ROOT/'docs').glob('*.md'))+[ROOT/'web'/name for name in ['index.html','qa.html','development.html','lab.css','lab.js']]
+    files+=list((ROOT/'docs').glob('*.json'))+list((ROOT/'docs').glob('*.md'))
+    # The website's authored source only; node_modules/ and the dist/ build stay local.
+    files+=[ROOT/'web'/name for name in ['index.html','package.json','package-lock.json','tsconfig.json','vite.config.ts']]
+    files+=[path for path in (ROOT/'web/src').rglob('*') if path.suffix in ['.ts','.tsx','.css']]
     files+=list((ROOT/'tests').glob('*.py'))+list((ROOT/'.github/workflows').glob('*.yml'))
     files+=[ROOT/name for name in APPROVED_DATASET+AUTHORED_TRANSCRIPTS]
     for path in files:
