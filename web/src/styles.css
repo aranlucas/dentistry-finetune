@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+/* The lab is a chart folder: each experiment is a sheet, with index tabs on the left.
+   Marks follow dental charting: blue ("pass") is done/correct, red ("fail") needs attention.
+   Form ink (green) is structure only: labels, rules, the open tab. */
+@theme {
+  --color-*: initial;
+  --color-paper: #e4eae7;
+  --color-sheet: #fbfcfa;
+  --color-well: #f1f5f3;
+  --color-ink: #18262b;
+  --color-muted: #56676b;
+  --color-form: #3f7465;
+  --color-rule: #cad8d2;
+  --color-grid: #dde7e2;
+  --color-pass: #1e4fc2;
+  --color-pass-wash: #e5ecfb;
+  --color-fail: #c1342a;
+  --color-fail-wash: #fbe9e6;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --font-display: "Iowan Old Style", Charter, "Palatino Linotype", Georgia, serif;
+  --font-sans: Seravek, "Gill Sans Nova", "Segoe UI", system-ui, sans-serif;
+  --font-num: "DIN Alternate", Bahnschrift, "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  --animate-mark: mark 0.35s ease-out both;
+  @keyframes mark {
+    from { transform: scale(0.2); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+}
+
+/* Dark mode is a lightbox: the same chart, lit from behind. */
+@layer base {
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-paper: #0e171a;
+      --color-sheet: #152226;
+      --color-well: #1b2b30;
+      --color-ink: #e3ece8;
+      --color-muted: #9aaca8;
+      --color-form: #7fc0ac;
+      --color-rule: #2a3e43;
+      --color-grid: #22353a;
+      --color-pass: #8eadff;
+      --color-pass-wash: #1b2742;
+      --color-fail: #ff8c7c;
+      --color-fail-wash: #3a2220;
+    }
+  }
+  :root { color-scheme: light dark; }
+  body { @apply bg-paper font-sans text-base/[1.55] text-ink antialiased; }
+  :focus-visible { @apply outline-2 outline-offset-2 outline-pass; }
+  a { @apply text-pass underline decoration-1 underline-offset-3; }
+}
+
+/* The charting "X" for a failed answer, drawn in the current text color. */
+@utility cross {
+  background:
+    linear-gradient(45deg, transparent 43%, currentColor 43% 57%, transparent 57%),
+    linear-gradient(-45deg, transparent 43%, currentColor 43% 57%, transparent 57%);
+}

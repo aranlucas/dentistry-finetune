@@ -22,15 +22,21 @@ embedding APIs are used. No clinician has reviewed any model output.
 A local website shows both experiments. Start it with:
 
 ```sh
-make dev                                          # https://oral-board-local-lab.localhost via Portless
-.venv/bin/python src/server.py --port 8765        # or plain http://127.0.0.1:8765
+make dev                                          # build, then https://oral-board-local-lab.localhost via Portless
+make build && .venv/bin/python src/server.py      # or plain http://127.0.0.1:8765
 ```
 
-`make dev` runs the server through [Portless](https://github.com/vercel-labs/portless)
+The website is a React app (Vite, TypeScript, TanStack Router and Query, zod, Tailwind)
+in `web/`. `make build` installs its packages with `npm ci` and writes `web/dist/`,
+which the Python server serves alongside the `/api` routes. `make dev` builds first,
+then runs the server through [Portless](https://github.com/vercel-labs/portless)
 (`npm install -g portless`); its first run may ask for `sudo` to bind port 443 and trust
-a local certificate.
+a local certificate. For live-reloading website work, start the server on port 8765 and
+run `make web-dev`; Vite forwards `/api` to it.
 
-Each page opens with a charting grid: one column per frozen question, one row per
+Every page is a sheet in a chart folder, with tabs on the left (on top on phones). All
+three use the same components: run picker, result chart, answer reader, training facts,
+and a local demo. Each page opens with a charting grid: one column per frozen question, one row per
 condition. It borrows the dental-charting convention of blue for completed work and red
 for problems.
 
@@ -43,18 +49,20 @@ for problems.
   red flags for repeated phrases (R) and token-limit stops (L). A switch picks the short
   or three-pass run. Below: loss curves, every question with both answers and the
   withheld reference, and a one-question local demo.
-- **`/development` Reviewed answers.** Compare actual base and adapter responses,
-  inspect each logged assistant judgment, and read the evidence supplied to both
-  models. Select earlier development versions or try a question with a short reference
-  excerpt. Missing generations and pending judgments remain explicit.
+- **`/development` Reviewed answers.** Each cell is the assistant's judgment: a filled
+  dot passes, a ring is partial, a red cross fails, a dashed ring awaits review. Long
+  question sets wrap into bands. Below: every answer beside its judgment and reason, the
+  source-supported study answer, and the excerpts supplied to both models. Select earlier
+  development versions or try a question with a short reference excerpt.
 
 The site reads saved files and never invents answer text. Missing predictions are
 labeled as missing, and aggregate scores are never turned into per-case answers. Demo
 requests run one at a time in a short-lived process. Model memory is released afterwards
 and no request or answer text is logged. The server binds only to loopback, checks
-host/origin, and loads no external scripts or fonts. The pages are `web/index.html`,
-`web/qa.html`, `web/development.html`, and the shared `web/lab.css` and `web/lab.js`. They support light and dark
-mode and phone widths. If model inference is blocked by the resource guard, use the
+host/origin, and loads no external scripts or fonts. Every API response is checked with
+zod, so a missing or reshaped local file shows an error instead of a half-drawn page. The
+selected run is kept in the URL (for example `/qa?run=short`). The pages support light and
+dark mode and phone widths. If model inference is blocked by the resource guard, use the
 keyword baseline.
 
 Run selection uses ignored pointer files:
@@ -328,7 +336,7 @@ improved dataset needs a new version and its own sharing authorization.
 | Path | Contents |
 | --- | --- |
 | `src/` | Data preparation, training, evaluation, reporting, the resource guard, the bounded job wrapper, and the local web server |
-| `web/` | The lab website: `index.html`, `qa.html`, `development.html`, and the shared `lab.css` and `lab.js` |
+| `web/` | The lab website: a Vite + React app (`src/pages/` for the three sheets, `src/components/` for the shared pieces, `src/api.ts` for the zod-checked API); `dist/` and `node_modules/` stay local |
 | `configs/` | Frozen experiment configurations |
 | `docs/` | Upstream licensing notes, hardware, and model provenance |
 | `datasets/pilot-v1/` | The approved, immutable pilot dataset snapshot |

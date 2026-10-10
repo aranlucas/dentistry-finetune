@@ -12,7 +12,17 @@ from urllib.parse import urlparse,parse_qs
 
 ROOT=Path(__file__).resolve().parents[1]
 BUSY=threading.Lock()
-STATIC={'/lab.css':'text/css','/lab.js':'text/javascript'}
+APP=ROOT/'web/dist'
+PAGES={'/','/qa','/development'}
+ASSET_TYPES={'.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml','.woff2':'font/woff2'}
+
+def app_file(route):
+    """The built React app (web/dist): one page for every sheet, plus its hashed assets."""
+    if route in PAGES:return APP/'index.html','text/html'
+    if route.startswith('/assets/'):
+        path=(APP/route.lstrip('/')).resolve()
+        if path.parent==(APP/'assets').resolve() and path.suffix in ASSET_TYPES and path.is_file():return path,ASSET_TYPES[path.suffix]
+    return None
 
 def qa_run(choice=None):
     from qa import local_directory
@@ -173,9 +183,11 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if not self.origin_ok():return self.send(403,b'{}')
         route=urlparse(self.path).path
-        if route=='/':return self.send(200,(ROOT/'web/index.html').read_bytes(),'text/html')
-        if route=='/qa':return self.send(200,(ROOT/'web/qa.html').read_bytes(),'text/html')
-        if route=='/development':return self.send(200,(ROOT/'web/development.html').read_bytes(),'text/html')
+        found=app_file(route)
+        if found:
+            path,kind=found
+            if not path.exists():return self.send(503,b'The lab website is not built. Run make build, then reload.','text/plain')
+            return self.send(200,path.read_bytes(),kind)
         if route=='/api/development':
             try:
                 choice=parse_qs(urlparse(self.path).query).get('run',['curated'])
@@ -183,7 +195,6 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200,json.dumps(development_data(choice[0])).encode())
             except (OSError,ValueError,KeyError):
                 return self.send(503,b'{"error":"Local development comparison is missing or inconsistent."}')
-        if route in STATIC:return self.send(200,(ROOT/'web'/route[1:]).read_bytes(),STATIC[route])
         if route=='/api/qa':
             try:
                 from qa import comparison_data as qa_comparison
