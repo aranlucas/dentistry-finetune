@@ -19,8 +19,8 @@ def export():
     if target.exists():shutil.rmtree(target)
     target.mkdir(parents=True)
     files=[ROOT/name for name in TOP+AGGREGATE]
-    files+=list((ROOT/'src').glob('*.py'))+list((ROOT/'configs').glob('*.json'))
-    files+=list((ROOT/'docs').glob('*.json'))+list((ROOT/'docs').glob('*.md'))+[ROOT/'web/index.html']
+    files+=list((ROOT/'src').glob('*.py'))+[ROOT/'src/oral_dataset_extract.mjs']+list((ROOT/'configs').glob('*.json'))
+    files+=list((ROOT/'docs').glob('*.json'))+list((ROOT/'docs').glob('*.md'))+[ROOT/'web'/name for name in ['index.html','qa.html','development.html','lab.css','lab.js']]
     files+=list((ROOT/'tests').glob('*.py'))+list((ROOT/'.github/workflows').glob('*.yml'))
     files+=[ROOT/name for name in APPROVED_DATASET+AUTHORED_TRANSCRIPTS]
     for path in files:

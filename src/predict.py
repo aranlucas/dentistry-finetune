@@ -1,5 +1,6 @@
 """One local request in a short-lived process; prompts are never written to disk."""
 import json
+import fcntl
 import sys
 import time
 from runtime import ROOT, CFG, load_local, infer
@@ -25,6 +26,10 @@ def main():
     if condition == 'retrieval':
         raw = retrieval_answer(example)
     else:
+        (ROOT/'.local').mkdir(exist_ok=True)
+        model_lock=(ROOT/'.local/model-job.lock').open('a')
+        try:fcntl.flock(model_lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        except BlockingIOError:raise ValueError('Another bounded model job is already running')
         guard = Guard(CFG, ROOT/'runs/demo-resources.jsonl', 45)
         model, tokenizer = load_local(condition == 'adapter_rag')
         guard.check(force=True)
