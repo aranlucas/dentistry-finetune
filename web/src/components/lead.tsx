@@ -39,12 +39,12 @@ export type RunOption = { value: string; label: string; disabled?: boolean };
 /** Page headline (the measured finding), its context, and the run being shown. */
 export function Lead({ headline, lede, run }: LeadProps) {
   return (
-    <div className="grid gap-6 py-7 md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-10 md:pt-11">
+    <div className="grid gap-6 py-7 md:grid-cols-heading md:items-end md:gap-10 md:pbs-11">
       <div>
-        <h1 className="mb-4 max-w-[18em] font-display text-[clamp(32px,4.2vw,50px)]/[1.1] tracking-[-0.012em] text-balance">
+        <h1 className="mbe-4 max-w-title font-display text-hero/heading tracking-title text-balance">
           {headline}
         </h1>
-        <p className="max-w-[64ch] text-[17px] text-muted">{lede}</p>
+        <p className="max-w-description text-subtitle text-muted">{lede}</p>
       </div>
       {run}
     </div>
@@ -57,13 +57,13 @@ export function RunPicker({ legend, options, value, onChange, note }: RunPickerP
 
   return (
     <fieldset className="m-0 min-w-0 border-0 p-0">
-      <legend className="mb-1.5 p-0 text-sm text-form">{legend}</legend>
+      <legend className="mbe-1.5 p-0 text-sm text-form">{legend}</legend>
       {compact ? (
-        <div className="inline-flex gap-0.5 rounded-full border border-rule bg-well p-[3px]">
+        <div className="inline-flex gap-0.5 rounded-full border border-rule bg-well p-mark-line">
           {options.map((o) => (
             <label
               key={o.value}
-              className="relative cursor-pointer rounded-full px-[15px] py-[7px] text-sm whitespace-nowrap has-checked:bg-ink has-checked:font-semibold has-checked:text-sheet has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-pass has-disabled:cursor-default has-disabled:opacity-45"
+              className="relative cursor-pointer rounded-full px-chip-inset py-compact-gap text-sm whitespace-nowrap has-checked:bg-ink has-checked:font-semibold has-checked:text-sheet has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-pass has-disabled:cursor-default has-disabled:opacity-45"
             >
               <input
                 type="radio"
@@ -83,7 +83,7 @@ export function RunPicker({ legend, options, value, onChange, note }: RunPickerP
           aria-label={legend}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-[min(380px,100%)]"
+          className="w-counter"
         >
           {options.map((o) => (
             <option key={o.value} value={o.value} disabled={o.disabled}>
@@ -92,7 +92,7 @@ export function RunPicker({ legend, options, value, onChange, note }: RunPickerP
           ))}
         </Select>
       )}
-      {note && <p className="mt-2 max-w-[32ch] text-[13px] text-muted">{note}</p>}
+      {note && <p className="mbs-2 max-w-summary text-caption text-muted">{note}</p>}
     </fieldset>
   );
 }
@@ -103,7 +103,7 @@ export function Alert({ error, hint }: AlertProps) {
   }
 
   return (
-    <div role="alert" className="mt-6 rounded-lg bg-fail-wash px-4 py-3.5 text-fail">
+    <div role="alert" className="mbs-6 rounded-lg bg-fail-wash px-4 py-3.5 text-fail">
       {error.message}
       {hint ? ` ${hint}` : ""}
     </div>
@@ -118,14 +118,14 @@ export function Finding({
   limitsTitle = "What it doesn’t show",
 }: FindingProps) {
   return (
-    <div className="grid gap-6 border-b border-rule pt-9 pb-10 md:grid-cols-2 md:gap-12">
+    <div className="grid gap-6 border-be border-rule pbs-9 pbe-10 md:grid-cols-2 md:gap-12">
       <div>
-        <H2 className="text-[22px]">{showsTitle}</H2>
-        <p className="max-w-[60ch] text-muted">{shows}</p>
+        <H2 className="text-section">{showsTitle}</H2>
+        <p className="max-w-intro text-muted">{shows}</p>
       </div>
-      <div className="border-t-2 border-rule pt-5 md:border-t-0 md:border-l-2 md:pt-0 md:pl-6">
-        <H2 className="text-[22px]">{limitsTitle}</H2>
-        <p className="max-w-[60ch] text-muted">{limits}</p>
+      <div className="border-bs-2 border-rule pbs-5 md:border-s-2 md:border-bs-0 md:ps-6 md:pbs-0">
+        <H2 className="text-section">{limitsTitle}</H2>
+        <p className="max-w-intro text-muted">{limits}</p>
       </div>
     </div>
   );
@@ -138,12 +138,12 @@ export function Section({ id, title, intro, action, className, children }: Secti
     <section
       id={id}
       aria-labelledby={head}
-      className={cx("scroll-mt-4 border-b border-rule py-11 last:border-b-0", className)}
+      className={cx("scroll-mbs-4 border-be border-rule py-11 last:border-be-0", className)}
     >
-      <div className="mb-[22px] flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between">
+      <div className="mbe-section-inset flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <H2 id={head}>{title}</H2>
-          {intro && <p className="max-w-[64ch] text-muted">{intro}</p>}
+          {intro && <p className="max-w-description text-muted">{intro}</p>}
         </div>
         {action}
       </div>

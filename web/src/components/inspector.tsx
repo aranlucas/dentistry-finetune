@@ -84,28 +84,28 @@ export const Inspector = forwardRef<HTMLElement, InspectorProps>(function Inspec
   );
 
   return (
-    <div className="grid min-h-[560px] overflow-hidden rounded-xl border border-rule bg-sheet md:grid-cols-[240px_minmax(0,1fr)] lg:grid-cols-[290px_minmax(0,1fr)]">
-      <aside className="flex min-h-0 flex-col border-b border-rule bg-well md:border-r md:border-b-0">
-        <div className="grid gap-2 border-b border-rule p-3.5">
+    <div className="grid min-h-inspector-floor overflow-hidden rounded-xl border border-rule bg-sheet md:grid-cols-inspector lg:grid-cols-inspector-wide">
+      <aside className="flex min-h-0 flex-col border-be border-rule bg-well md:border-e md:border-be-0">
+        <div className="grid gap-2 border-be border-rule p-3.5">
           {tools}
-          <span className="text-[13px] text-muted">
+          <span className="text-caption text-muted">
             {items.length} of {total} {noun}
           </span>
         </div>
-        <div ref={list} className="relative max-h-[220px] overflow-auto md:max-h-[640px]">
+        <div ref={list} className="relative max-h-case-list overflow-auto md:max-h-chart-floor">
           {items.map((item) => (
             <button
               type="button"
               key={item.id}
               aria-current={item.id === selected}
               onClick={() => onSelect(item.id)}
-              className="group grid w-full cursor-pointer grid-cols-[28px_minmax(0,1fr)] gap-x-2.5 gap-y-[3px] border-0 border-b border-grid bg-transparent px-3.5 py-3 text-left text-[15px]/snug hover:bg-sheet/60 aria-[current=true]:bg-sheet aria-[current=true]:shadow-[inset_3px_0_0_var(--color-pass)]"
+              className="group grid w-full cursor-pointer grid-cols-result-row gap-x-2.5 gap-y-mark-line border-0 border-be border-grid bg-transparent px-3.5 py-3 text-start text-control/snug hover:bg-sheet/60 aria-current:bg-sheet aria-current:shadow-selected-row"
             >
-              <span className="font-num text-muted tabular-nums group-aria-[current=true]:text-pass">
+              <span className="font-num text-muted tabular-nums group-aria-current:text-pass">
                 {pad(item.number)}
               </span>
               <span className="line-clamp-2">{item.text || "(Empty)"}</span>
-              <span className="col-start-2 truncate text-[13px] text-muted">{item.sub}</span>
+              <span className="col-start-2 truncate text-caption text-muted">{item.sub}</span>
             </button>
           ))}
           {!items.length && empty}
@@ -115,7 +115,7 @@ export const Inspector = forwardRef<HTMLElement, InspectorProps>(function Inspec
         ref={ref}
         aria-live="polite"
         tabIndex={-1}
-        className="min-w-0 scroll-mt-4 p-[18px] md:px-8 md:py-7"
+        className="min-w-0 scroll-mbs-4 p-detail-inset md:px-8 md:py-7"
       >
         {current ? (
           <>
@@ -145,24 +145,22 @@ export const Inspector = forwardRef<HTMLElement, InspectorProps>(function Inspec
 
 /** The case as the models saw it. */
 export const Prompt = ({ children }: PromptProps) => (
-  <p className="mt-4 mb-6 max-w-[44ch] font-display text-[clamp(22px,2.4vw,28px)]/[1.35]">
-    {children}
-  </p>
+  <p className="mbs-4 mbe-6 max-w-empty font-display text-question/relaxed-copy">{children}</p>
 );
 
 /** The frozen reference answer, marked in the charting blue. */
 export function Target({ title, answer, note }: TargetProps) {
   return (
-    <div className="mb-7 border-l-[3px] border-pass py-1 pl-4">
+    <div className="mbe-7 border-s-3 border-pass py-1 ps-4">
       <H3 className="text-sm text-pass">{title}</H3>
       <p className="font-display text-lg/snug">{answer}</p>
-      <small className="mt-1 block text-[13px] text-muted">{note}</small>
+      <small className="mbs-1 block text-caption text-muted">{note}</small>
     </div>
   );
 }
 
 export const Answers = ({ children }: AnswersProps) => (
-  <div className="grid gap-6 min-[1100px]:grid-cols-2">{children}</div>
+  <div className="grid gap-6 inspector-wide:grid-cols-2">{children}</div>
 );
 
 export type Verdict = { state: Glyph; text: string };
@@ -171,8 +169,8 @@ export type Verdict = { state: Glyph; text: string };
 export function Answer({ title, verdict, raw, prose, missing, reason, foot }: AnswerProps) {
   return (
     <section className="min-w-0">
-      <div className="mb-2 flex items-baseline justify-between gap-3">
-        <H3 className="mb-0">{title}</H3>
+      <div className="mbe-2 flex items-baseline justify-between gap-3">
+        <H3 className="mbe-0">{title}</H3>
         <span
           className={cx(
             "text-sm",
@@ -190,32 +188,32 @@ export function Answer({ title, verdict, raw, prose, missing, reason, foot }: An
       {raw !== null && raw !== undefined ? (
         <Raw prose={prose}>{raw}</Raw>
       ) : (
-        <div className="flex min-h-36 flex-col justify-center rounded-lg border border-dashed border-rule px-4 py-3.5 text-[15px] text-muted">
+        <div className="flex min-h-36 flex-col justify-center rounded-lg border border-dashed border-rule px-4 py-3.5 text-control text-muted">
           <strong className="text-ink">{missing.title}</strong>
           <span>{missing.detail}</span>
         </div>
       )}
-      {reason && <p className="mt-3 border-t border-rule pt-3 text-sm text-muted">{reason}</p>}
-      {foot && <div className="mt-1.5 text-[13px] text-muted">{foot}</div>}
+      {reason && <p className="mbs-3 border-bs border-rule pbs-3 text-sm text-muted">{reason}</p>}
+      {foot && <div className="mbs-1.5 text-caption text-muted">{foot}</div>}
     </section>
   );
 }
 
 export function Evidence({ summary, open, children }: EvidenceProps) {
   return (
-    <details open={open} className="mt-7 border-t border-rule pt-4">
-      <summary className="cursor-pointer text-[15px] font-semibold text-form">{summary}</summary>
-      <div className="mt-1">{children}</div>
+    <details open={open} className="mbs-7 border-bs border-rule pbs-4">
+      <summary className="cursor-pointer text-control font-semibold text-form">{summary}</summary>
+      <div className="mbs-1">{children}</div>
     </details>
   );
 }
 
 export function Excerpt({ tag, text, title, url, detail }: ExcerptProps) {
   return (
-    <div className="grid grid-cols-[36px_minmax(0,1fr)] gap-2.5 pt-3.5 text-[15px]">
+    <div className="grid grid-cols-case-row gap-2.5 pbs-3.5 text-control">
       <span className="font-num text-pass">{tag}</span>
       <div>
-        <blockquote className="mb-1 leading-relaxed">{text}</blockquote>
+        <blockquote className="mbe-1 leading-relaxed">{text}</blockquote>
         <SourceLink title={title} url={url} detail={detail} />
       </div>
     </div>
@@ -224,7 +222,7 @@ export function Excerpt({ tag, text, title, url, detail }: ExcerptProps) {
 
 export function SourceLink({ title, url, detail }: SourceLinkProps) {
   return (
-    <p className="text-[13px]">
+    <p className="text-caption">
       <a href={url} target="_blank" rel="noopener noreferrer">
         {title}
       </a>

@@ -278,7 +278,7 @@ function Results({
           {selectedCase && (
             <>
               <Prompt>{selectedCase.question}</Prompt>
-              <p className="-mt-3 mb-6 max-w-[70ch] text-sm text-muted">
+              <p className="-mbs-3 mbe-6 max-w-paragraph text-sm text-muted">
                 Review criteria: {selectedCase.criteria}
               </p>
               <Answers>
@@ -315,7 +315,7 @@ function Results({
                 })}
               </Answers>
               <Evidence summary="Source-supported study answer and references">
-                <Raw prose className="mt-3.5 mb-2 min-h-0">
+                <Raw prose className="mbs-3.5 mbe-2 min-h-0">
                   {selectedCase.reference}
                 </Raw>
                 {selectedCase.publisher_references.map((ref) => (
@@ -415,7 +415,7 @@ function Ask({ d, run, current }: AskProps) {
                 maxLength={2000}
                 placeholder="Paste a short publisher excerpt supporting your question"
               />
-              <p className="mt-2 text-sm text-muted">
+              <p className="mbs-2 text-sm text-muted">
                 Use a short excerpt. The complete input must fit the local model’s token budget.
               </p>
               <FieldActions>

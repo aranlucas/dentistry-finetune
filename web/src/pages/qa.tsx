@@ -303,7 +303,7 @@ function Results({ d, complete, base, tuned, reload, reloading }: ResultsProps) 
                 })}
               </Answers>
               <Evidence summary="Authored reference answer">
-                <Raw prose className="mt-3.5 mb-2 min-h-0">
+                <Raw prose className="mbs-3.5 mbe-2 min-h-0">
                   {selectedCase.reference}
                 </Raw>
                 <SourceLink

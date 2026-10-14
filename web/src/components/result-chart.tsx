@@ -73,11 +73,11 @@ export function MarkGlyph({ state, className }: MarkGlyphProps) {
 
 export function KeyItem({ mark, children }: KeyItemProps) {
   return (
-    <span className="inline-flex items-center gap-[7px]">
+    <span className="inline-flex items-center gap-compact-gap">
       {mark && (
         <MarkGlyph
           state={mark}
-          className={mark === "fail" ? "inline-block size-3.5" : "inline-block size-[11px]"}
+          className={mark === "fail" ? "inline-block size-3.5" : "inline-block size-pass-glyph"}
         />
       )}
       {children}
@@ -114,14 +114,14 @@ export function ResultChart({
   return (
     <section
       aria-label={title}
-      className="rounded-xl border border-rule bg-sheet px-3 pt-4 pb-3.5 md:px-6 md:pt-[22px] md:pb-[18px]"
+      className="rounded-xl border border-rule bg-sheet px-3 pbs-4 pbe-3.5 md:px-6 md:pbs-section-inset md:pbe-detail-inset"
     >
       {bands.map((band, b) => (
         <div
           key={band
             .map((group) => `${group.label}:${group.columns.map((column) => column.id).join(":")}`)
             .join("|")}
-          className="overflow-x-auto pb-1 not-first:mt-5"
+          className="overflow-x-auto pbe-1 not-first:mbs-5"
         >
           <Band
             groups={band}
@@ -134,7 +134,9 @@ export function ResultChart({
           />
         </div>
       ))}
-      <div className="mt-3.5 flex flex-wrap gap-x-[22px] gap-y-2 text-sm text-muted">{legend}</div>
+      <div className="mbs-3.5 flex flex-wrap gap-x-section-inset gap-y-2 text-sm text-muted">
+        {legend}
+      </div>
     </section>
   );
 }
@@ -144,13 +146,13 @@ function Band({ groups, rows, selected, onSelect, showTally, reveal, cellMin }: 
   const template = `9.5rem ${groups.map((g) => `repeat(${g.columns.length},minmax(${cellMin}px,1fr))`).join(" 18px ")} 5.5rem`;
 
   return (
-    <div className="grid min-w-[640px]" style={{ gridTemplateColumns: template }}>
+    <div className="grid min-w-chart-floor" style={{ gridTemplateColumns: template }}>
       <span />
       {groups.map((g, i) => (
         <Fragment key={`${g.label}:${g.columns.map((column) => column.id).join(":")}`}>
           {i > 0 && <span />}
           <span
-            className="mb-2 border-b-2 border-form pb-[7px] text-sm text-form"
+            className="mbe-2 border-be-2 border-form pbe-compact-gap text-sm text-form"
             style={{ gridColumn: `span ${g.columns.length}` }}
           >
             {g.label || " "}
@@ -166,7 +168,7 @@ function Band({ groups, rows, selected, onSelect, showTally, reveal, cellMin }: 
             <span
               key={c.id}
               title={c.title}
-              className="pb-2 text-center font-num text-[13px]/none text-muted tabular-nums"
+              className="pbe-2 text-center font-num text-caption/none text-muted tabular-nums"
             >
               {pad(c.number)}
             </span>
@@ -176,7 +178,7 @@ function Band({ groups, rows, selected, onSelect, showTally, reveal, cellMin }: 
       <span />
       {rows.map((row, r) => (
         <Fragment key={row.key}>
-          <span className="flex items-center pr-[18px] text-[15px] font-semibold whitespace-nowrap">
+          <span className="flex items-center pe-detail-inset text-control font-semibold whitespace-nowrap">
             {row.label}
           </span>
           {groups.map((g, i) => (
@@ -195,11 +197,11 @@ function Band({ groups, rows, selected, onSelect, showTally, reveal, cellMin }: 
               ))}
             </Fragment>
           ))}
-          <span className="flex items-center justify-end pl-[18px] font-num text-[26px]/none whitespace-nowrap tabular-nums">
+          <span className="flex items-center justify-end ps-detail-inset font-num text-stat/none whitespace-nowrap tabular-nums">
             {showTally && (
               <>
                 {row.tally.value}
-                <small className="ml-0.5 font-sans text-sm text-muted">{row.tally.unit}</small>
+                <small className="ms-0.5 font-sans text-sm text-muted">{row.tally.unit}</small>
               </>
             )}
           </span>
@@ -222,24 +224,24 @@ function Cell({ mark, current, delay, top, left, onClick }: CellProps) {
       aria-pressed={current}
       onClick={onClick}
       className={cx(
-        "relative block aspect-square max-h-[46px] w-full cursor-pointer border-0 border-r border-b border-grid bg-transparent hover:bg-pass-wash",
-        top && "border-t",
-        left && "border-l",
-        current && "bg-pass-wash shadow-[inset_0_0_0_2px_var(--color-pass)]",
+        "relative block aspect-square max-h-chart-cell w-full cursor-pointer border-0 border-e border-be border-grid bg-transparent hover:bg-pass-wash",
+        top && "border-bs",
+        left && "border-s",
+        current && "bg-pass-wash shadow-selected-mark",
       )}
     >
       {mark.state === "measure" ? (
         <>
           <span
             aria-hidden="true"
-            className={cx("absolute inset-x-0 bottom-0 bg-pass/18", motion)}
+            className={cx("absolute inset-x-0 inset-be-0 bg-pass/18", motion)}
             style={{ ...style, height: `${Math.round(mark.value * 100)}%` }}
           />
           <span className="absolute inset-0 grid place-items-center font-num text-sm/none tabular-nums">
             {mark.text}
           </span>
           {mark.flags && (
-            <span className="absolute top-[3px] right-1 text-[10px]/none font-bold text-fail">
+            <span className="absolute inset-e-1 inset-bs-mark-line text-micro/none font-bold text-fail">
               {mark.flags}
             </span>
           )}
@@ -247,7 +249,11 @@ function Cell({ mark, current, delay, top, left, onClick }: CellProps) {
       ) : (
         <MarkGlyph
           state={mark.state}
-          className={cx("absolute", mark.state === "fail" ? "inset-[24%]" : "inset-[26%]", motion)}
+          className={cx(
+            "absolute",
+            mark.state === "fail" ? "inset-mark-outer" : "inset-mark-inner",
+            motion,
+          )}
         />
       )}
     </button>

@@ -74,7 +74,7 @@ export function LossChart({ rows }: LossChartProps) {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         role="img"
-        className="block h-auto w-full fill-muted font-num text-[12px]"
+        className="block h-auto w-full fill-muted font-num text-footnote"
         aria-label={
           span
             ? `Validation loss went from ${span} over ${steps} updates.`
@@ -127,17 +127,17 @@ export function LossChart({ rows }: LossChartProps) {
             />
           ))}
       </svg>
-      <div className="mt-1.5 flex gap-5 text-sm text-muted">
-        <span className="inline-flex items-center gap-[7px]">
-          <i className="h-[3px] w-[18px] bg-pass" />
+      <div className="mbs-1.5 flex gap-5 text-sm text-muted">
+        <span className="inline-flex items-center gap-compact-gap">
+          <i className="h-mark-line w-detail-inset bg-pass" />
           Validation loss
         </span>
-        <span className="inline-flex items-center gap-[7px]">
-          <i className="h-0.5 w-[18px] bg-muted" />
+        <span className="inline-flex items-center gap-compact-gap">
+          <i className="h-0.5 w-detail-inset bg-muted" />
           Training loss
         </span>
       </div>
-      <p className="mt-2.5 text-sm text-muted">
+      <p className="mbs-2.5 text-sm text-muted">
         {span
           ? `Validation loss went from ${span}. That is a teacher-forced score; it does not measure the answers the model generates.`
           : "Validation loss is shown at each recorded checkpoint."}
@@ -149,11 +149,14 @@ export function LossChart({ rows }: LossChartProps) {
 /** The run's measured facts, printed like the vitals box on a chart. */
 export function Facts({ facts }: FactsProps) {
   return (
-    <dl className="m-0 grid grid-cols-2 border-t-2 border-form">
+    <dl className="m-0 grid grid-cols-2 border-bs-2 border-form">
       {facts.map(([k, v]) => (
-        <div key={k} className="border-b border-rule pt-3 pb-3.5 odd:pr-4 even:border-l even:pl-4">
+        <div
+          key={k}
+          className="border-be border-rule pbs-3 pbe-3.5 odd:pe-4 even:border-s even:ps-4"
+        >
           <dt className="text-sm text-form">{k}</dt>
-          <dd className="mt-0.5 font-num text-[28px]/tight tabular-nums">{v}</dd>
+          <dd className="mbs-0.5 font-num text-chart/tight tabular-nums">{v}</dd>
         </div>
       ))}
     </dl>
@@ -165,14 +168,14 @@ export function TrainingRun({ title, loss, model, facts, note }: TrainingRunProp
   const runFacts = (
     <div className="min-w-0">
       <H2>Training run</H2>
-      <p className="mb-4 text-muted">{model}</p>
+      <p className="mbe-4 text-muted">{model}</p>
       <Facts facts={facts} />
-      {note && <p className="mt-4 text-sm wrap-anywhere text-muted">{note}</p>}
+      {note && <p className="mbs-4 text-sm wrap-anywhere text-muted">{note}</p>}
     </div>
   );
 
   return (
-    <section aria-label={title} className="border-b border-rule py-11">
+    <section aria-label={title} className="border-be border-rule py-11">
       {loss ? (
         <div className="grid gap-10 md:grid-cols-2 md:gap-12">
           <div className="min-w-0">
@@ -182,7 +185,7 @@ export function TrainingRun({ title, loss, model, facts, note }: TrainingRunProp
           {runFacts}
         </div>
       ) : (
-        <div className="max-w-[640px]">{runFacts}</div>
+        <div className="max-w-chart-floor">{runFacts}</div>
       )}
     </section>
   );
