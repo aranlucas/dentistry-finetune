@@ -4,7 +4,8 @@
   },
   "extends": [
     "./node_modules/@aranlucas/oxforge/configs/recommended.json",
-    "./node_modules/@aranlucas/oxforge/configs/react.json"
+    "./node_modules/@aranlucas/oxforge/configs/react.json",
+    "./node_modules/@aranlucas/oxforge/configs/vitest.json"
   ],
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "env": {
