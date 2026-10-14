@@ -28,6 +28,10 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: "Website: typecheck and build"
+        working-directory: web
+        run: npm ci && npm run build
+
       - parallel:
           - name: Confirm only the approved dataset snapshot is present
             run: |
@@ -51,7 +55,3 @@ jobs:
 
           - name: "Lint: compile source"
             run: python -m compileall -q src tests
-
-      - name: "Website: typecheck and build"
-        working-directory: web
-        run: npm ci && npm run build
