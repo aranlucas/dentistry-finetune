@@ -19,11 +19,50 @@
   --color-fail-wash: #fbe9e6;
   --color-transparent: transparent;
   --color-current: currentColor;
+  --color-tab: color-mix(in srgb, var(--color-sheet) 45%, var(--color-paper));
 
   --font-display: "Iowan Old Style", Charter, "Palatino Linotype", Georgia, serif;
   --font-sans: Seravek, "Gill Sans Nova", "Segoe UI", system-ui, sans-serif;
   --font-num: "DIN Alternate", Bahnschrift, "Segoe UI", system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  --spacing-mark-line: 3px;
+  --spacing-compact-gap: 7px;
+  --spacing-pass-glyph: 11px;
+  --spacing-chip-inset: 15px;
+  --spacing-detail-inset: 18px;
+  --spacing-section-inset: 22px;
+  --spacing-chart-cell: 46px;
+  --spacing-input-floor: 84px;
+  --spacing-case-list: 220px;
+  --spacing-inspector-floor: 560px;
+  --spacing-chart-floor: 640px;
+  --spacing-page-limit: 1440px;
+
+  --text-micro: 10px;
+  --text-footnote: 12px;
+  --text-caption: 13px;
+  --text-control: 15px;
+  --text-subtitle: 17px;
+  --text-section: 22px;
+  --text-stat: 26px;
+  --text-chart: 28px;
+  --text-question: clamp(22px, 2.4vw, 28px);
+  --text-hero: clamp(32px, 4.2vw, 50px);
+  --leading-relaxed-copy: 1.35;
+  --leading-heading: 1.1;
+  --tracking-title: -0.012em;
+  --radius-tab: 10px;
+  --container-title: 18em;
+  --container-summary: 32ch;
+  --container-empty: 44ch;
+  --container-intro: 60ch;
+  --container-description: 64ch;
+  --container-paragraph: 70ch;
+  --container-footer: 90ch;
+  --shadow-selected-mark: inset 0 0 0 2px var(--color-pass);
+  --shadow-selected-row: inset 3px 0 0 var(--color-pass);
+  --breakpoint-inspector-wide: 1100px;
 
   --animate-mark: mark 0.35s ease-out both;
   @keyframes mark {
@@ -75,4 +114,52 @@
   background:
     linear-gradient(45deg, transparent 43%, currentColor 43% 57%, transparent 57%),
     linear-gradient(-45deg, transparent 43%, currentColor 43% 57%, transparent 57%);
+}
+
+@utility grid-cols-result-row {
+  grid-template-columns: 28px minmax(0, 1fr);
+}
+
+@utility grid-cols-case-row {
+  grid-template-columns: 36px minmax(0, 1fr);
+}
+
+@utility grid-cols-folder {
+  grid-template-columns: 216px minmax(0, 1fr);
+}
+
+@utility grid-cols-folder-wide {
+  grid-template-columns: 232px minmax(0, 1fr);
+}
+
+@utility grid-cols-inspector {
+  grid-template-columns: 240px minmax(0, 1fr);
+}
+
+@utility grid-cols-inspector-wide {
+  grid-template-columns: 290px minmax(0, 1fr);
+}
+
+@utility grid-cols-heading {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+@utility grid-rows-folder {
+  grid-template-rows: auto 1fr auto;
+}
+
+@utility grid-rows-folder-wide {
+  grid-template-rows: 1fr auto;
+}
+
+@utility inset-mark-outer {
+  inset: 24%;
+}
+
+@utility inset-mark-inner {
+  inset: 26%;
+}
+
+@utility w-counter {
+  width: min(380px, 100%);
 }

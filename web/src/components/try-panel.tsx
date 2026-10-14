@@ -54,15 +54,15 @@ export function TryPanel({
             </option>
           ))}
         </Select>
-        <div className="mt-4 flex flex-wrap items-center gap-2.5">
+        <div className="mbs-4 flex flex-wrap items-center gap-2.5">
           <Button primary disabled={busy || disabled} onClick={onRun}>
             {busy ? "Running on this Mac…" : action}
           </Button>
         </div>
-        <Raw prose={prose} className="mt-4">
+        <Raw prose={prose} className="mbs-4">
           {output ?? "The response appears here."}
         </Raw>
-        <div role="status" className="mt-2.5 min-h-[22px] text-sm text-muted">
+        <div role="status" className="mbs-2.5 min-h-section-inset text-sm text-muted">
           {status}
         </div>
       </div>
@@ -96,5 +96,5 @@ export function Field({
 
 /** Secondary actions under the inputs, such as loading an example. */
 export const FieldActions = ({ children }: FieldActionsProps) => (
-  <div className="mt-4 flex flex-wrap items-center gap-2.5">{children}</div>
+  <div className="mbs-4 flex flex-wrap items-center gap-2.5">{children}</div>
 );

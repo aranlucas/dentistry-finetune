@@ -244,9 +244,9 @@ function Results({ c, report: r, replay }: ResultsProps) {
         intro="A usable answer is valid JSON, follows the schema, quotes the right ending, and cites the right excerpt. Abstaining when the evidence is missing counts as correct."
       >
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-[15px] tabular-nums">
+          <table className="w-full border-collapse text-control tabular-nums">
             <thead>
-              <tr className="border-b-2 border-form text-sm text-form">
+              <tr className="border-be-2 border-form text-sm text-form">
                 {[
                   "Condition",
                   "Parseable JSON",
@@ -257,7 +257,7 @@ function Results({ c, report: r, replay }: ResultsProps) {
                   <th
                     key={h}
                     scope="col"
-                    className={`px-3 pb-3 align-bottom font-normal ${i ? "text-right" : "pl-0 text-left"}`}
+                    className={`px-3 pbe-3 align-bottom font-normal ${i ? "text-end" : "pl-0 text-left"}`}
                   >
                     {h}
                   </th>
@@ -269,8 +269,11 @@ function Results({ c, report: r, replay }: ResultsProps) {
                 const v = r.conditions[key];
 
                 return (
-                  <tr key={key} className="border-b border-rule">
-                    <th scope="row" className="py-3 pr-3 text-left font-semibold whitespace-nowrap">
+                  <tr key={key} className="border-be border-rule">
+                    <th
+                      scope="row"
+                      className="py-3 pe-3 text-start font-semibold whitespace-nowrap"
+                    >
                       {names[key]}
                     </th>
                     {[
@@ -281,7 +284,7 @@ function Results({ c, report: r, replay }: ResultsProps) {
                     ].map(({ id, value: t }) => (
                       <td
                         key={id}
-                        className={`px-3 py-3 text-right font-num text-[17px] ${t.total && t.count === t.total ? "text-pass" : "text-fail"}`}
+                        className={`p-3 text-end font-num text-subtitle ${t.total && t.count === t.total ? "text-pass" : "text-fail"}`}
                       >
                         {tally(t)}
                       </td>
@@ -292,7 +295,7 @@ function Results({ c, report: r, replay }: ResultsProps) {
             </tbody>
           </table>
         </div>
-        <div className="mt-6 grid gap-6 text-[15px] text-muted md:grid-cols-2 md:gap-12">
+        <div className="mbs-6 grid gap-6 text-control text-muted md:grid-cols-2 md:gap-12">
           <div>
             <H3 className="text-ink">How the base model failed</H3>
             {failures?.base_rag ? (
@@ -301,7 +304,7 @@ function Results({ c, report: r, replay }: ResultsProps) {
                   {failures.base_rag.categories.unstructured_prose_or_echo ?? 0} answers were free
                   text or echoed the prompt instead of JSON.
                 </p>
-                <p className="mt-1.5">
+                <p className="mbs-1.5">
                   The expected ending appeared somewhere in{" "}
                   {failures.base_rag.target_ending_in_unstructured_output} of them. That doesn’t
                   meet the contract, so they count as failures.
@@ -316,7 +319,7 @@ function Results({ c, report: r, replay }: ResultsProps) {
             {failures?.adapter_rag ? (
               <>
                 <p>{why["JSON parse failure"] ?? 0} answers attempted JSON that didn’t parse.</p>
-                <p className="mt-1.5">
+                <p className="mbs-1.5">
                   {(why["Invalid citation label"] ?? 0) +
                     (why["Inconsistent abstention/citation"] ?? 0)}{" "}
                   parsed but broke the schema: a made-up citation label, or an abstention that also
@@ -474,7 +477,7 @@ function PilotCaseDetail({ e, outputOf }: PilotCaseDetailProps) {
         }
       >
         {!e.passages.length && (
-          <p className="pt-2 text-sm text-muted">
+          <p className="pbs-2 text-sm text-muted">
             With no evidence, the correct response is to abstain.
           </p>
         )}
