@@ -27,8 +27,14 @@
 
   --animate-mark: mark 0.35s ease-out both;
   @keyframes mark {
-    from { transform: scale(0.2); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    from {
+      transform: scale(0.2);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 }
 
@@ -50,10 +56,18 @@
       --color-fail-wash: #3a2220;
     }
   }
-  :root { color-scheme: light dark; }
-  body { @apply bg-paper font-sans text-base/[1.55] text-ink antialiased; }
-  :focus-visible { @apply outline-2 outline-offset-2 outline-pass; }
-  a { @apply text-pass underline decoration-1 underline-offset-3; }
+  :root {
+    color-scheme: light dark;
+  }
+  body {
+    @apply bg-paper font-sans text-base/[1.55] text-ink antialiased;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-pass;
+  }
+  a {
+    @apply text-pass underline decoration-1 underline-offset-3;
+  }
 }
 
 /* The charting "X" for a failed answer, drawn in the current text color. */
