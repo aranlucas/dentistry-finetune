@@ -238,8 +238,6 @@ export const generation = z.object({
 // Reviewed development answers
 export const DECISIONS = ["pass", "partial", "fail"] as const;
 
-export type Decision = (typeof DECISIONS)[number];
-
 const devOutput = z
   .object({
     raw: z.string(),
@@ -249,8 +247,6 @@ const devOutput = z
     finish_reason: z.string(),
   })
   .nullish();
-
-export type DevOutput = z.infer<typeof devOutput>;
 
 export type DevCase = z.infer<typeof devCase>;
 
