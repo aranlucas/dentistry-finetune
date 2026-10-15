@@ -26,12 +26,6 @@ type RawProps = {
   children: ReactNode;
 };
 
-type MutedProps = {
-  small?: boolean;
-  className?: string;
-  children: ReactNode;
-};
-
 const control = "rounded-lg border border-rule bg-well px-3 py-2 text-control hover:border-form/50";
 
 export function Button({ primary, className, ...props }: ButtonProps) {
@@ -92,8 +86,4 @@ export const Raw = ({ prose, className, children }: RawProps) => (
   >
     {children}
   </pre>
-);
-
-export const Muted = ({ small, className, children }: MutedProps) => (
-  <p className={cx("text-muted", small && "text-sm", className)}>{children}</p>
 );
