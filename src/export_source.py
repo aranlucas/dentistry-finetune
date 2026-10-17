@@ -22,8 +22,10 @@ def export():
     files+=list((ROOT/'src').glob('*.py'))+[ROOT/'src/oral_dataset_extract.mjs']+list((ROOT/'configs').glob('*.json'))
     files+=list((ROOT/'docs').glob('*.json'))+list((ROOT/'docs').glob('*.md'))
     # The website's authored source only; node_modules/ and the dist/ build stay local.
-    files+=[ROOT/'web'/name for name in ['index.html','package.json','package-lock.json','tsconfig.json','vite.config.ts']]
+    files+=[ROOT/'web'/name for name in ['index.html','package.json','package-lock.json','tsconfig.json','vite.config.ts',
+                                      '.gitignore','.oxlintrc.json','oxfmt.config.ts']]
     files+=[path for path in (ROOT/'web/src').rglob('*') if path.suffix in ['.ts','.tsx','.css']]
+    files+=[path for path in (ROOT/'web/test').rglob('*') if path.suffix in ['.ts','.tsx']]
     files+=list((ROOT/'tests').glob('*.py'))+list((ROOT/'.github/workflows').glob('*.yml'))
     files+=[ROOT/name for name in APPROVED_DATASET+AUTHORED_TRANSCRIPTS]
     for path in files:
@@ -42,7 +44,8 @@ def export():
             forbidden_snippets += [p['text'] for row in rows for p in row['passages']]
     receipt={}
     for path in sorted(set(files)):
-        text=path.read_text()
+        raw=path.read_bytes()
+        text=raw.decode('utf-8').replace('\r\n','\n').replace('\r','\n')
         name=str(path.relative_to(ROOT))
         forbidden=[] if name in APPROVED_DATASET else forbidden_snippets
         if name not in APPROVED_DATASET+AUTHORED_TRANSCRIPTS:forbidden=forbidden+forbidden_metadata
@@ -50,7 +53,8 @@ def export():
             raise ValueError(f'Unapproved local document content found in export: {path.name}')
         if path.suffix in ['.safetensors','.bin','.sqlite','.gguf']:raise ValueError('Model/corpus file forbidden')
         relative=path.relative_to(ROOT);output=target/relative;output.parent.mkdir(parents=True,exist_ok=True)
-        output.write_text(text);receipt[str(relative)]={'bytes':output.stat().st_size,'sha256':hashlib.sha256(output.read_bytes()).hexdigest()}
+        # Screening may normalize newlines; the immutable deliverables must not.
+        output.write_bytes(raw);receipt[str(relative)]={'bytes':output.stat().st_size,'sha256':hashlib.sha256(raw).hexdigest()}
     (target/'EXPORT-MANIFEST.json').write_text(json.dumps(receipt,indent=2)+'\n')
     archive=ROOT/'.local/oral-board-local-lab-source.zip'
     with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
