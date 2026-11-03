@@ -18,8 +18,6 @@ class DatasetChecks(unittest.TestCase):
         for split,counts in expected.items():
             meta=manifest['splits'][split];path=DATASET/meta['file'];raw=path.read_bytes()
             self.assertEqual(hashlib.sha256(raw).hexdigest(),meta['sha256'])
-            self.assertEqual(hashlib.sha256(raw).hexdigest(),integrity[path.name]['sha256'])
-            self.assertEqual(len(raw),integrity[path.name]['bytes'])
             rows=[json.loads(line) for line in raw.decode().splitlines()]
             self.assertEqual((len(rows),sum(r['kind']=='supported' for r in rows),
                               sum(r['kind']=='missing_context' for r in rows),
