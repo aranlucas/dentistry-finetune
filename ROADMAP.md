@@ -4,14 +4,6 @@ Updated 2026-10-26. Proposed local research and study-tool improvements, after
 Digits/MCP priorities. This document contains authored planning only; no source
 corpus, model output, new dataset or model weights are published with it.
 
-## Starting point
-
-Baseline `929a388d77e4ddae316093629d4e5a21bbb21f37`: the [lab](README.md)
-already shows frozen experiments, local answers and review journals. The
-sentence-completion pilot was a negative result: its deterministic baseline
-outperformed the tested model conditions on that narrow task. Other development
-comparisons do not establish clinical reliability or independent generalization.
-
 ## Ordered releases
 
 1. **Make an experiment's decision easy to inspect.** Add a concise local
@@ -42,7 +34,7 @@ comparisons do not establish clinical reliability or independent generalization.
 Start with the decision view over existing saved results. Ask whether a reader
 can correctly identify the negative pilot result, the limits of the comparison
 and one justified next experiment. Measure comprehension and review time before
-spending more compute. More training steps and lower loss are not product value.
+spending more compute.
 
 Preserve frozen pilot bytes and all existing memory, swap, thermal and job
 limits. Training/inference remain local and sequential. Reuse the current
