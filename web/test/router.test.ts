@@ -3,12 +3,17 @@ import { describe, expect, it } from "vitest";
 import { router } from "@/router";
 
 const routes = [
-  { label: "pilot", path: "/", allowed: ["original", "replay"] },
-  { label: "QA", path: "/qa", allowed: ["long", "short"] },
-  { label: "development", path: "/development", allowed: ["reviewed-run", ""] },
+  { label: "pilot", path: "/", allowed: ["original", "replay"], invalid: "bogus" },
+  { label: "QA", path: "/qa", allowed: ["long", "short"], invalid: "bogus" },
+  {
+    label: "development",
+    path: "/development",
+    allowed: ["reviewed-run", ""],
+    invalid: "x".repeat(81),
+  },
 ];
 
-const invalidRuns = ["42", "null", "true", '%5B"unexpected"%5D', "x".repeat(81)];
+const invalidRuns = ["42", "null", "true", '%5B"unexpected"%5D'];
 
 describe("route search validation", () => {
   for (const route of routes) {
@@ -24,7 +29,8 @@ describe("route search validation", () => {
       expect(page?.search).toHaveProperty("run", run);
     });
 
-    it.each(invalidRuns)(`${route.label} clears invalid run %s after router merging`, (run) => {
+    const rejected = [...invalidRuns, route.invalid];
+    it.each(rejected)(`${route.label} clears invalid run %s after router merging`, (run) => {
       router.update({
         history: createMemoryHistory({ initialEntries: [`${route.path}?run=${run}`] }),
       });
@@ -44,13 +50,4 @@ describe("route search validation", () => {
       expect(page?.search).toMatchObject({ run: undefined });
     });
   }
-
-  it.each(["/", "/qa"])("clears an unknown named run on %s", (path) => {
-    router.update({ history: createMemoryHistory({ initialEntries: [`${path}?run=bogus`] }) });
-
-    const page = router.matchRoutes(router.latestLocation).at(-1);
-
-    expect(page?.search).toHaveProperty("run");
-    expect(page?.search).toMatchObject({ run: undefined });
-  });
 });
