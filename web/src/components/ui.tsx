@@ -1,5 +1,4 @@
 import { cx } from "../class-names";
-// Shared primitives so every sheet uses the same controls, type, and boxes.
 import type {
   ButtonHTMLAttributes,
   ReactNode,
@@ -75,7 +74,6 @@ export const H3 = ({ className, children }: H3Props) => (
   <h3 className={cx("mbe-1.5 text-control font-semibold", className)}>{children}</h3>
 );
 
-/** Raw model text in a recessed box: monospace for JSON answers, the reading face for prose answers. */
 export const Raw = ({ prose, className, children }: RawProps) => (
   <pre
     className={cx(

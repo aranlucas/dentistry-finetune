@@ -3,8 +3,7 @@ import hashlib
 import json
 import unittest
 from pathlib import Path
-from task import canonical, score, parse_strict
-from evaluate import retrieval_answer
+from task import canonical, score, parse_strict, retrieval_answer
 
 class Checks(unittest.TestCase):
     def setUp(self):

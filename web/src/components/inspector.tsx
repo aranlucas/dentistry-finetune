@@ -42,7 +42,6 @@ type SourceLinkProps = {
 
 export type ListItem = { id: string; number: number; text: string; sub: string };
 
-/** Read every answer: a filterable list of cases beside the selected case. */
 type InspectorProps = {
   items: ListItem[];
   total: number;
@@ -61,7 +60,6 @@ export const Inspector = forwardRef<HTMLElement, InspectorProps>(function Inspec
   const index = items.findIndex((i) => i.id === selected);
   const current = items[index];
   const list = useRef<HTMLDivElement>(null);
-  // Keep the selected case visible in the list without moving the page.
   useLayoutEffect(() => {
     const box = list.current;
     const item = box?.querySelector<HTMLElement>("[aria-current=true]");
@@ -143,12 +141,10 @@ export const Inspector = forwardRef<HTMLElement, InspectorProps>(function Inspec
   );
 });
 
-/** The case as the models saw it. */
 export const Prompt = ({ children }: PromptProps) => (
   <p className="mbs-4 mbe-6 max-w-empty font-display text-question/relaxed-copy">{children}</p>
 );
 
-/** The frozen reference answer, marked in the charting blue. */
 export function Target({ title, answer, note }: TargetProps) {
   return (
     <div className="mbe-7 border-s-3 border-pass py-1 ps-4">
@@ -165,7 +161,6 @@ export const Answers = ({ children }: AnswersProps) => (
 
 export type Verdict = { state: Glyph; text: string };
 
-/** One model's saved answer, its verdict, and how it was produced. */
 export function Answer({ title, verdict, raw, prose, missing, reason, foot }: AnswerProps) {
   return (
     <section className="min-w-0">

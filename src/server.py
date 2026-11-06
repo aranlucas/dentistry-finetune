@@ -9,6 +9,7 @@ import threading
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse,parse_qs
+from judgment_journal import verified_rows
 
 ROOT=Path(__file__).resolve().parents[1]
 BUSY=threading.Lock()
@@ -133,14 +134,8 @@ def development_data(choice):
     manifest=json.loads((run/'manifest.json').read_text())
     if digest(run/'questions.jsonl')!=manifest['questions_sha256'] or digest(run/'config.json')!=manifest['config_sha256']:raise ValueError('Frozen development recipe changed')
     questions=[json.loads(l) for l in (run/'questions.jsonl').read_text().splitlines()]
-    records={}; judgments={}
-    journal=run/'judgments.jsonl';previous=None
-    if journal.exists():
-        for index,line in enumerate(journal.read_text().splitlines(),1):
-            item=json.loads(line);value=dict(item);sha=value.pop('entry_sha256')
-            if value['sequence']!=index or value['previous_sha256']!=previous:raise ValueError('Judgment order changed')
-            if hashlib.sha256(json.dumps(value,sort_keys=True,ensure_ascii=False).encode()).hexdigest()!=sha:raise ValueError('Judgment changed')
-            judgments[item['id']]=item;previous=sha
+    records={}
+    judgments={item['id']:item for item in verified_rows(run/'judgments.jsonl')}
     counts={}
     for condition in ('base','adapter'):
         path=run/f'runs/{condition}-predictions.jsonl'
@@ -159,7 +154,7 @@ def development_data(choice):
             records[condition][item['id']]={**item,'judgment':judgment}
     parent=local_directory(manifest['model_run']);progress=parent/'runs/progress.json'
     training=parent/'runs/training-summary.json';cfg=json.loads((parent/'config.json').read_text())
-    return {'runs':[{'id':k,'label':v['label']} for k,v in registry.items()], 'label':registry[choice]['label'],
+    return {'run_id':choice, 'runs':[{'id':k,'label':v['label']} for k,v in registry.items()], 'label':registry[choice]['label'],
             'limits':manifest['limits'], 'input_mode':manifest.get('input_mode','Question alone'),
             'counts':counts, 'temperature':json.loads((run/'config.json').read_text())['temperature'],
             'training':json.loads(training.read_text()) if training.exists() else None,

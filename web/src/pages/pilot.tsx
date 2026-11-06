@@ -75,7 +75,7 @@ export function Pilot() {
         hint="Start the local server with make dev and keep the frozen experiment files in place."
       />
       <Lead
-        headline={headline(report, error)}
+        headline={headline(report ?? undefined, error)}
         lede="Each of the 24 held-out cases asks a model to finish a sentence from a dental reference, cite the excerpt it came from, or abstain when the excerpts don’t contain it. A keyword baseline that copies the matching sentence is shown for comparison."
         run={
           <RunPicker
@@ -150,7 +150,7 @@ function headline(r: Report | undefined, error: Error | null) {
 
   return tuned.count === 0
     ? "The fine-tuned model produced no usable answers."
-    : tuned.rate > base.rate
+    : (tuned.rate ?? 0) > (base.rate ?? 0)
       ? "The fine-tune improved exact answers."
       : "The fine-tune did not improve exact answers.";
 }

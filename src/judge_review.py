@@ -6,28 +6,11 @@ import json
 import math
 import re
 import sqlite3
-import time
 from pathlib import Path
 from qa import ROOT, digest, local_directory
-from qa_dataset import verify, normalized
+from qa_dataset import verify
+from judgment_journal import append, rows, verified_rows
 
-
-def rows(path):
-    return [json.loads(line) for line in path.read_text().splitlines()] if path.exists() else []
-
-
-def append(review, entries):
-    path = review / 'judgments.jsonl'; old = rows(path)
-    seen = {r['id'] for r in old}; previous = old[-1]['entry_sha256'] if old else None
-    with path.open('a') as stream:
-        for entry in entries:
-            if entry['id'] in seen: raise ValueError('Existing judgment is immutable')
-            value = {**entry, 'sequence': len(seen) + 1, 'previous_sha256': previous,
-                     'time_unix': time.time()}
-            previous = hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
-            value['entry_sha256'] = previous
-            stream.write(json.dumps(value, ensure_ascii=False) + '\n'); stream.flush()
-            seen.add(entry['id'])
 
 
 def initialize(dataset, review):
@@ -115,13 +98,8 @@ def record(dataset, review, decisions):
 
 
 def summary(dataset, review):
-    verify(dataset); log=rows(review/'judgments.jsonl'); previous=None
-    for sequence,item in enumerate(log,1):
-        value=dict(item); sha=value.pop('entry_sha256')
-        if value['sequence']!=sequence or value['previous_sha256']!=previous:raise ValueError('Journal order changed')
-        if hashlib.sha256(json.dumps(value,sort_keys=True,ensure_ascii=False).encode()).hexdigest()!=sha:
-            raise ValueError('Journal judgment changed')
-        previous=sha
+    verify(dataset); log=verified_rows(review/'judgments.jsonl')
+    previous=log[-1]['entry_sha256'] if log else None
     total=len(rows(dataset/'candidates.jsonl'))+len(rows(dataset/'excluded.jsonl'))
     result={'logged':len(log),'total':total,'pending':total-len(log),
             'decisions':dict(collections.Counter(r['decision'] for r in log)),

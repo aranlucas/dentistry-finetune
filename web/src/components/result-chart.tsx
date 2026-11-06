@@ -35,7 +35,6 @@ type CellProps = {
   onClick: () => void;
 };
 
-/** One mark on the chart. Marks follow dental charting: blue is done, red needs attention. */
 export type Glyph = "pass" | "partial" | "fail" | "none";
 
 export type Mark =
@@ -53,7 +52,6 @@ export type ChartRow = {
 
 const BAND = 30;
 
-/** Filled dot = correct, ring = partly correct, red cross = failed, dashed ring = no answer to judge. */
 export function MarkGlyph({ state, className }: MarkGlyphProps) {
   return (
     <span
@@ -85,8 +83,6 @@ export function KeyItem({ mark, children }: KeyItemProps) {
   );
 }
 
-/** The result chart: one row per model, one column per case, grouped like the arches of a tooth chart.
-    A single long group wraps into bands so every mark stays visible without scrolling sideways. */
 export function ResultChart({
   title,
   groups,
@@ -142,7 +138,6 @@ export function ResultChart({
 }
 
 function Band({ groups, rows, selected, onSelect, showTally, reveal, cellMin }: BandProps) {
-  // Fixed label and tally columns keep stacked bands aligned with each other.
   const template = `9.5rem ${groups.map((g) => `repeat(${g.columns.length},minmax(${cellMin}px,1fr))`).join(" 18px ")} 5.5rem`;
 
   return (

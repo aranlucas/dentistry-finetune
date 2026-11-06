@@ -1,5 +1,3 @@
-// Typed access to the local Python server. Every response is parsed with zod, so a missing or
-// reshaped local file shows as an error instead of a half-drawn page. Nothing is invented client-side.
 import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
 
@@ -67,7 +65,7 @@ export const postJSON = async <S extends z.ZodType>(
     "Local inference stopped.",
   );
 
-const tally = z.object({ count: z.number(), total: z.number(), rate: z.number() });
+const tally = z.object({ count: z.number(), total: z.number(), rate: z.number().nullable() });
 
 export type Tally = z.infer<typeof tally>;
 
@@ -103,7 +101,7 @@ const condition = z.object({ metrics, abstention_cases: metrics });
 
 const report = z.object({
   conditions: z.object({ retrieval: condition, base_rag: condition, adapter_rag: condition }),
-  training: training.optional(),
+  training: training.nullish(),
   reproduction_status: z.string().optional(),
   reproduction_detail: z.string().optional(),
   qualitative_failures: z
@@ -163,7 +161,7 @@ const comparison = z.object({
   loss: z.array(lossRow),
   original_loss: z.array(lossRow),
   reproduction: z.boolean(),
-  report: report.optional(),
+  report: report.nullish(),
   available_outputs: available,
   original_available_outputs: available,
   demo_model_available: z.boolean(),
@@ -272,6 +270,7 @@ const counts = z.object({
 });
 
 const development = z.object({
+  run_id: z.string(),
   runs: z.array(z.object({ id: z.string(), label: z.string() })),
   label: z.string(),
   limits: z.string(),

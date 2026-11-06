@@ -1,5 +1,8 @@
 """Fixed extractive study contract; no medical advice or free-form diagnosis."""
 import json
+TEMPLATES={'train':['Complete this study note: {prefix}','Finish the source sentence: {prefix}','Fill in the omitted ending: {prefix}'],
+           'valid':['What words finish this source note? {prefix}'],
+           'test':['Supply the exact missing ending for review: {prefix}','For my practice notes, complete the citation-backed sentence: {prefix}']}
 SYSTEM = ('Help study source excerpts. Complete the quoted note using only the exact remaining '
           'words of one supplied sentence. Return JSON with exactly answer and citation. '
           'citation is S1 or S2. If the note is missing, malformed, asks for advice, or cannot be '
@@ -15,6 +18,15 @@ def user_prompt(note, passages):
 
 def canonical(value):
     return json.dumps(value,separators=(',',':'),ensure_ascii=False)
+
+def retrieval_answer(example):
+    """Lexical extraction from supplied candidate passages; no model or gold labels."""
+    templates=[template.removesuffix('{prefix}') for split in TEMPLATES.values() for template in split]
+    note=example['note'];lead=next((t for t in templates if note.startswith(t)),None)
+    if lead is None:return canonical({'answer':'ABSTAIN','citation':'NONE'})
+    prefix=note[len(lead):];matches=[p for p in example['passages'] if p['text'].startswith(prefix+' ')]
+    if len(matches)!=1:return canonical({'answer':'ABSTAIN','citation':'NONE'})
+    return canonical({'answer':matches[0]['text'][len(prefix):].strip(),'citation':matches[0]['citation']})
 
 def parse_strict(raw):
     def unique(pairs):

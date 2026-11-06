@@ -36,7 +36,6 @@ type SectionProps = {
 
 export type RunOption = { value: string; label: string; disabled?: boolean };
 
-/** Page headline (the measured finding), its context, and the run being shown. */
 export function Lead({ headline, lede, run }: LeadProps) {
   return (
     <div className="grid gap-6 py-7 md:grid-cols-heading md:items-end md:gap-10 md:pbs-11">
@@ -51,7 +50,6 @@ export function Lead({ headline, lede, run }: LeadProps) {
   );
 }
 
-/** Choose which run a sheet shows. A few short options read as a switch; longer lists become a menu. */
 export function RunPicker({ legend, options, value, onChange, note }: RunPickerProps) {
   const compact = options.length <= 3 && options.every((o) => o.label.length <= 24);
 
@@ -110,7 +108,6 @@ export function Alert({ error, hint }: AlertProps) {
   );
 }
 
-/** Two facing notes under the chart: what the measurement shows, and what it doesn't. */
 export function Finding({
   shows,
   showsTitle = "What the chart shows",

@@ -5,7 +5,6 @@ import { Development } from "./pages/development";
 import { Pilot } from "./pages/pilot";
 import { Qa } from "./pages/qa";
 
-// The run each sheet shows lives in the URL, so a view can be reloaded or linked.
 const rootRoute = createRootRoute({ component: Folder });
 
 const pilotRun = z.enum(["original", "replay"]);
