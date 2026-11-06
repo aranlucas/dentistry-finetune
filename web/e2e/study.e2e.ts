@@ -29,7 +29,7 @@ test("keyword completion cites evidence, abstains without it, and recovers", asy
 test("missing local experiments show an error and navigation recovers", async ({ app, screen }) => {
   await app.open("/qa");
   await expect(screen.getByRole("alert")).toContainText("unavailable or inconsistent");
-  await screen.getByRole("link", "Sentence completion").click();
+  await screen.getByRole("link", "Sentence completion Extract and cite from excerpts").click();
   await screen.getByRole("button", "Complete the note").click();
   await expect(screen.getByRole("status")).toContainText("Schema valid");
 });
