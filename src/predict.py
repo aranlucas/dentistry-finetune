@@ -4,7 +4,6 @@ import fcntl
 import sys
 import time
 from runtime import ROOT, CFG, load_local, infer
-from resources import Guard
 from task import user_prompt, parse_strict, retrieval_answer
 
 def main():
@@ -29,6 +28,7 @@ def main():
         model_lock=(ROOT/'.local/model-job.lock').open('a')
         try:fcntl.flock(model_lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         except BlockingIOError:raise ValueError('Another bounded model job is already running')
+        from resources import Guard
         guard = Guard(CFG, ROOT/'runs/demo-resources.jsonl', 45)
         model, tokenizer = load_local(condition == 'adapter_rag')
         guard.check(force=True)

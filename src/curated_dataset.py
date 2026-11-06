@@ -9,7 +9,7 @@ from pathlib import Path
 from qa import ROOT, SYSTEM, PII, StudyTokenizer, digest, messages, offline, verify, local_directory
 from qa_dataset import verify as verify_candidates
 from qa_long import verify_long
-from judgment_journal import append, rows
+from judgment_journal import append, rows, verified_rows
 
 
 def prepare(parent, dataset, review, specification, destination):
@@ -18,7 +18,7 @@ def prepare(parent, dataset, review, specification, destination):
     spec = json.loads(specification.read_text())
     if spec['reviewer'] != 'Codex assistant in this conversation': raise ValueError('Explicit assistant authorship required')
     candidates = {r['id']:r for r in rows(dataset/'candidates.jsonl')}
-    kept = {r['id'] for r in rows(review/'judgments.jsonl')
+    kept = {r['id'] for r in verified_rows(review/'judgments.jsonl')
             if r['decision']=='keep_candidate' and r['review_mode']=='assistant_direct'}
     cfg = json.loads((parent/'config.json').read_text())
     recipe=spec.get('training',{})

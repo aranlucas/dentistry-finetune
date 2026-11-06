@@ -6,6 +6,7 @@ import os
 import subprocess
 import sys
 import threading
+import time
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse,parse_qs
@@ -163,6 +164,12 @@ def development_data(choice):
             'cases':[{**q,'outputs':{c:records[c].get(q['id']) for c in records}} for q in questions]}
 
 class Handler(BaseHTTPRequestHandler):
+    request_timeout = 5
+
+    def setup(self):
+        super().setup()
+        self.connection.settimeout(self.request_timeout)
+
     def log_message(self,*args): pass
     def send(self,status,body,kind='application/json'):
         self.send_response(status)
@@ -205,7 +212,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200,json.dumps(data).encode())
             except (OSError,ValueError,KeyError):
                 return self.send(503,b'{"error":"The local Q&A experiment is unavailable or inconsistent."}')
-        if route=='/api/results':return self.send(200,(ROOT/'runs/results.json').read_bytes())
+        if route=='/api/results':
+            try:
+                data=json.loads((ROOT/'runs/results.json').read_text())
+                return self.send(200,json.dumps(data).encode())
+            except (OSError,ValueError):
+                return self.send(503,b'{"error":"Saved results are missing or inconsistent."}')
         if route=='/api/comparison':
             try:return self.send(200,json.dumps(comparison_data()).encode())
             except (OSError,ValueError,KeyError):
@@ -213,8 +225,11 @@ class Handler(BaseHTTPRequestHandler):
         if route=='/api/practice':
             path=ROOT/'data/heldout.jsonl'
             if not path.exists():return self.send(404,b'{"error":"Local corpus unavailable"}')
-            rows=[json.loads(line) for line in path.read_text().splitlines()]
-            safe=[{'id':r['id'],'note':r['note'],'passages':r['passages']} for r in rows if r['kind']=='supported']
+            try:
+                rows=[json.loads(line) for line in path.read_text().splitlines()]
+                safe=[{'id':r['id'],'note':r['note'],'passages':r['passages']} for r in rows if r['kind']=='supported']
+            except (OSError,ValueError,KeyError,TypeError):
+                return self.send(503,b'{"error":"Local practice data is inconsistent."}')
             return self.send(200,json.dumps(safe).encode())
         return self.send(404,b'{}')
     def do_POST(self):
@@ -225,11 +240,24 @@ class Handler(BaseHTTPRequestHandler):
         if not 0<n<=4096:return self.send(413,b'{"error":"Request too large"}')
         if not BUSY.acquire(blocking=False):return self.send(429,b'{"error":"One inference at a time"}')
         try:
-            request=self.rfile.read(n)
+            deadline=time.monotonic()+self.request_timeout
+            chunks=[]
+            remaining=n
+            while remaining:
+                budget=deadline-time.monotonic()
+                if budget<=0:raise TimeoutError('Request body deadline')
+                self.connection.settimeout(budget)
+                chunk=self.rfile.read1(remaining)
+                if not chunk:raise ValueError('Incomplete request body')
+                chunks.append(chunk)
+                remaining-=len(chunk)
+            self.connection.settimeout(self.request_timeout)
+            request=b''.join(chunks)
             if self.path in ['/api/qa/predict','/api/development/predict']:
                 payload=json.loads(request)
                 if not isinstance(payload,dict):raise ValueError('Invalid question')
                 choice=payload.pop('run',None)
+                if choice is not None and not isinstance(choice,str):raise ValueError('Invalid run selection')
                 experiment='qa-v1'
                 if self.path=='/api/development/predict':
                     from qa import local_directory
@@ -249,11 +277,17 @@ class Handler(BaseHTTPRequestHandler):
             else:
                 result=subprocess.run([sys.executable,str(ROOT/'src/predict.py')],input=request,capture_output=True,timeout=50,cwd=ROOT)
             if result.returncode!=0:return self.send(503,b'{"error":"Local inference stopped. Check the question bounds, completed model, and available resources."}')
-            output=json.loads(result.stdout)
+            try:
+                output=json.loads(result.stdout)
+                if not isinstance(output,dict):raise ValueError('Invalid prediction response')
+            except ValueError:
+                return self.send(503,b'{"error":"Local inference returned an invalid response."}')
             if self.path=='/api/development/predict':
                 output['temperature']=json.loads((run/'config.json').read_text())['temperature']
             return self.send(200,json.dumps(output).encode())
+        except TimeoutError:return self.send(408,b'{"error":"Request body time budget exceeded"}')
         except subprocess.TimeoutExpired:return self.send(503,b'{"error":"Local inference time budget exceeded"}')
+        except KeyError:return self.send(503,b'{"error":"Local experiment is missing or inconsistent."}')
         except (ValueError,OSError):return self.send(400,b'{"error":"Invalid local request"}')
         finally:BUSY.release()
 

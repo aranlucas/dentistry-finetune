@@ -30,6 +30,7 @@ def evaluate(run, condition, resume=False):
     if output.exists() and not resume:raise ValueError('Never overwrite completed answers')
     if fp.exists():
         if json.loads(fp.read_text())!=fingerprint:raise ValueError('Development fingerprint changed')
+    elif output.exists():raise ValueError('Cannot resume answers without their original fingerprint')
     else:fp.write_text(json.dumps(fingerprint,indent=2)+'\n')
     saved=[json.loads(l) for l in output.read_text().splitlines()] if output.exists() else []
     if [r['id'] for r in saved]!=[r['id'] for r in items[:len(saved)]]:raise ValueError('Saved answer prefix changed')

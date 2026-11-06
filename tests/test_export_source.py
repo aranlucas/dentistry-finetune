@@ -22,7 +22,8 @@ class ExportSourceChecks(unittest.TestCase):
                 + ['src/oral_dataset_extract.mjs', 'web/index.html', 'web/package.json',
                    'web/package-lock.json', 'web/tsconfig.json', 'web/vite.config.ts',
                    'web/.gitignore', 'web/.oxlintrc.json', 'web/oxfmt.config.ts',
-                   'web/src/main.tsx', 'web/test/router.test.ts']
+                   'web/src/main.tsx', 'web/test/router.test.ts', 'web/e2e.config.ts',
+                   'web/e2e/study.e2e.ts']
             )
             for name in required:
                 path = root / name

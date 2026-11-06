@@ -23,9 +23,10 @@ def export():
     files+=list((ROOT/'docs').glob('*.json'))+list((ROOT/'docs').glob('*.md'))
     # The website's authored source only; node_modules/ and the dist/ build stay local.
     files+=[ROOT/'web'/name for name in ['index.html','package.json','package-lock.json','tsconfig.json','vite.config.ts',
-                                      '.gitignore','.oxlintrc.json','oxfmt.config.ts']]
+                                      '.gitignore','.oxlintrc.json','oxfmt.config.ts','e2e.config.ts']]
     files+=[path for path in (ROOT/'web/src').rglob('*') if path.suffix in ['.ts','.tsx','.css']]
     files+=[path for path in (ROOT/'web/test').rglob('*') if path.suffix in ['.ts','.tsx']]
+    files+=[path for path in (ROOT/'web/e2e').rglob('*') if path.suffix == '.ts']
     files+=list((ROOT/'tests').glob('*.py'))+list((ROOT/'.github/workflows').glob('*.yml'))
     files+=[ROOT/name for name in APPROVED_DATASET+AUTHORED_TRANSCRIPTS]
     for path in files:
