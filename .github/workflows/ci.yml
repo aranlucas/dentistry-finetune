@@ -18,7 +18,7 @@ jobs:
   ci:
     if: ${{ github.event.pull_request.draft != true }}
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -62,3 +62,49 @@ jobs:
 
       - name: "Lint: compile source"
         run: python -m compileall -q src tests
+
+      - name: Prove audit regressions detect baseline defects
+        run: |
+          mkdir -p /tmp/audit-baseline
+          git show b618950:src/server.py > /tmp/audit-baseline/server.py
+          git show b618950:src/judgment_journal.py > /tmp/audit-baseline/judgment_journal.py
+          git show b618950:src/development.py > /tmp/audit-baseline/development.py
+          git show b618950:src/grounded.py > /tmp/audit-baseline/grounded.py
+          git show b618950:src/curated_dataset.py > /tmp/audit-baseline/curated_dataset.py
+          PYTHONPATH=/tmp/audit-baseline:src:tests python - <<'PY'
+          import unittest
+          from test_server import ServerFailureTests
+          from test_judgment_journal import JournalChecks
+          from test_development import DevelopmentChecks
+          names = [
+              ServerFailureTests('test_missing_and_corrupt_saved_results_return_json'),
+              ServerFailureTests('test_invalid_run_types_return_json_and_release_inference_slot'),
+              JournalChecks('test_concurrent_append_preserves_both_decisions'),
+              DevelopmentChecks('test_resume_requires_original_fingerprint_for_both_development_modes'),
+              DevelopmentChecks('test_curated_training_rejects_tampered_review_before_loading_tokenizer'),
+          ]
+          for test in names:
+              result = unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite([test]))
+              assert not result.wasSuccessful(), f'Baseline unexpectedly passed {test}'
+          PY
+
+      - name: Install pinned e2e browser
+        working-directory: web
+        run: npx --no-install e2e-web install chromium --with-deps
+
+      - name: Deterministic study journeys (no model credentials)
+        working-directory: web
+        run: npx --no-install e2e run --reporter list,junit
+
+      - name: Upload browser failure evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: study-e2e
+          path: |
+            web/.e2e/report.json
+            web/.e2e/junit.xml
+            web/.e2e/results
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 7

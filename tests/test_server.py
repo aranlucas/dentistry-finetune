@@ -75,3 +75,57 @@ class ServerOriginTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+class ServerFailureTests(ServerOriginTests):
+    def test_missing_and_corrupt_saved_results_return_json(self):
+        import json
+        with tempfile.TemporaryDirectory() as temporary, patch('server.ROOT', Path(temporary)):
+            root = Path(temporary)
+            httpd = self.start_server()
+            for value in (None, '{'):
+                if value is not None:
+                    (root / 'runs').mkdir(exist_ok=True)
+                    (root / 'runs/results.json').write_text(value)
+                connection = http.client.HTTPConnection('127.0.0.1', httpd.server_port, timeout=2)
+                self.addCleanup(connection.close)
+                connection.request('GET', '/api/results')
+                response = connection.getresponse()
+                self.assertEqual(response.status, 503)
+                self.assertIn('error', json.loads(response.read()))
+
+    def test_invalid_run_types_return_json_and_release_inference_slot(self):
+        import json
+        import server
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        (root / '.local').mkdir()
+        (root / '.local/development-run-history.json').write_text('{}')
+        fixture = patch('server.ROOT', root)
+        fixture.start()
+        self.addCleanup(fixture.stop)
+        httpd = self.start_server()
+        for run in ([], {}, 42):
+            connection = http.client.HTTPConnection('127.0.0.1', httpd.server_port, timeout=2)
+            self.addCleanup(connection.close)
+            connection.request('POST', '/api/development/predict', json.dumps({'run': run}))
+            response = connection.getresponse()
+            self.assertEqual(response.status, 400)
+            self.assertIn('error', json.loads(response.read()))
+            self.assertFalse(server.BUSY.locked())
+
+    def test_partial_body_times_out_and_releases_slot(self):
+        import json
+        import server
+        with patch.object(server.Handler, 'request_timeout', 0.1):
+            httpd = self.start_server()
+            connection = http.client.HTTPConnection('127.0.0.1', httpd.server_port, timeout=2)
+            self.addCleanup(connection.close)
+            connection.putrequest('POST', '/api/predict')
+            connection.putheader('Content-Length', '20')
+            connection.endheaders(b'{')
+            response = connection.getresponse()
+            self.assertEqual(response.status, 408)
+            self.assertIn('error', json.loads(response.read()))
+            self.assertFalse(server.BUSY.locked())
+            self.assertEqual(self.request(httpd), 200)

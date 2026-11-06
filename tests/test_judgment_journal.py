@@ -50,3 +50,45 @@ class JournalChecks(unittest.TestCase):
         self.path.write_text(raw)
         self.assertEqual(verified_rows(self.path)[0]["id"], "legacy")
         self.assertEqual(self.path.read_text(), raw)
+
+    def test_concurrent_append_preserves_both_decisions(self):
+        # Pause writer A after reading its tail; B must not read a stale tail.
+        import concurrent.futures
+        import threading
+        from unittest.mock import patch
+        import judgment_journal
+
+        original = judgment_journal.verified_rows
+        read_a = threading.Event()
+        release_a = threading.Event()
+        start_b = threading.Event()
+
+        def paused_read(path):
+            result = original(path)
+            if threading.current_thread().name.startswith('writer-a'):
+                read_a.set()
+                if not release_a.wait(3):
+                    raise RuntimeError('Writer release timed out')
+            return result
+
+        def second_writer():
+            start_b.set()
+            append(self.review, [{'id': 'b'}])
+
+        with patch.object(judgment_journal, 'verified_rows', paused_read), \
+             concurrent.futures.ThreadPoolExecutor(1, thread_name_prefix='writer-a') as first, \
+             concurrent.futures.ThreadPoolExecutor(1, thread_name_prefix='writer-b') as second:
+            a = first.submit(append, self.review, [{'id': 'a'}])
+            try:
+                self.assertTrue(read_a.wait(2))
+                b = second.submit(second_writer)
+                self.assertTrue(start_b.wait(2))
+                try:
+                    b.result(timeout=0.3)
+                except concurrent.futures.TimeoutError:
+                    pass
+            finally:
+                release_a.set()
+            a.result(timeout=2)
+            b.result(timeout=2)
+        self.assertEqual({r['id'] for r in verified_rows(self.path)}, {'a', 'b'})

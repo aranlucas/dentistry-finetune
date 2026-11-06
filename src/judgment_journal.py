@@ -1,5 +1,6 @@
 # Native JSON/JSONL commands cannot enforce this repository's append-only judgment hash chain.
 """Local judgment storage shared by authoring, review and result readers."""
+import fcntl
 import hashlib
 import json
 import time
@@ -29,14 +30,15 @@ def verified_rows(path):
 
 def append(review, entries):
     path = review / 'judgments.jsonl'
-    old = verified_rows(path)
-    entries = list(entries)
-    seen = {entry['id'] for entry in old}
-    ids = [entry['id'] for entry in entries]
-    if len(set(ids)) != len(ids) or seen.intersection(ids):
-        raise ValueError('Existing judgment is immutable')
-    previous = old[-1]['entry_sha256'] if old else None
     with path.open('a') as stream:
+        fcntl.flock(stream, fcntl.LOCK_EX)
+        old = verified_rows(path)
+        entries = list(entries)
+        seen = {entry['id'] for entry in old}
+        ids = [entry['id'] for entry in entries]
+        if len(set(ids)) != len(ids) or seen.intersection(ids):
+            raise ValueError('Existing judgment is immutable')
+        previous = old[-1]['entry_sha256'] if old else None
         for sequence, entry in enumerate(entries, len(old) + 1):
             value = {**entry, 'sequence': sequence, 'previous_sha256': previous,
                      'time_unix': time.time()}
