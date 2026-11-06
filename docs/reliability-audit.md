@@ -39,3 +39,7 @@ Independent review: one same-provider child challenged the findings and implemen
 Source export completed locally: 96 allowlisted authored/approved files; archive and receipt remain under `.local`. Dataset bytes and existing aggregate metrics are unchanged. No test or build ran locally; lockfile install used `--ignore-scripts`.
 
 Dependencies: `e2e@0.23.0` and `@e2e-dev/web@0.15.5` are the real published tester-army runner and browser engine. Current quickstart/CI/GitHub Actions docs and the pinned upstream Vite example were read; their Node requirement is ^22.22.3 or >=24.8.0, satisfied by existing CI Node 24.22.1. CI runs exact locator/action/assertion flows against built React + real Python API: evidence-backed completion, missing-evidence abstention, recovered completion, unavailable Q&A error and navigation back to a working journey. No agent, login, API key or local private dataset is used.
+
+Final independent review accepted the persistence and e2e changes and identified that a socket inactivity timeout alone permits a drip-fed body to monopolize BUSY. The final implementation uses an absolute monotonic body deadline, with a dedicated drip-feed regression in CI as well as the stalled-body case.
+
+First CI run (42300453612) passed website lint/format/Vitest/build, privacy checks, synthetic contracts, all Python tests and compilation. Baseline demonstration then failed because checkout was shallow; CI now fetches history explicitly. Browser journeys still require evidence from the next complete CI run.

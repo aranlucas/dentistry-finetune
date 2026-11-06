@@ -129,3 +129,37 @@ class ServerFailureTests(ServerOriginTests):
             self.assertIn('error', json.loads(response.read()))
             self.assertFalse(server.BUSY.locked())
             self.assertEqual(self.request(httpd), 200)
+
+    def test_dripping_body_cannot_extend_total_request_deadline(self):
+        import time
+        import server
+        with patch.object(server.Handler, 'request_timeout', 0.2):
+            httpd = self.start_server()
+            connection = http.client.HTTPConnection('127.0.0.1', httpd.server_port, timeout=3)
+            self.addCleanup(connection.close)
+            connection.putrequest('POST', '/api/predict')
+            connection.putheader('Content-Length', '100')
+            connection.endheaders()
+            stop = threading.Event()
+
+            def drip():
+                for _ in range(30):
+                    if stop.wait(0.05):
+                        return
+                    try:
+                        connection.send(b' ')
+                    except OSError:
+                        return
+
+            thread = threading.Thread(target=drip)
+            started = time.monotonic()
+            thread.start()
+            try:
+                response = connection.getresponse()
+                response.read()
+                self.assertEqual(response.status, 408)
+                self.assertLess(time.monotonic() - started, 1)
+            finally:
+                stop.set()
+                thread.join(2)
+            self.assertFalse(server.BUSY.locked())

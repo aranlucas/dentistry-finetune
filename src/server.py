@@ -6,6 +6,7 @@ import os
 import subprocess
 import sys
 import threading
+import time
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse,parse_qs
@@ -239,7 +240,19 @@ class Handler(BaseHTTPRequestHandler):
         if not 0<n<=4096:return self.send(413,b'{"error":"Request too large"}')
         if not BUSY.acquire(blocking=False):return self.send(429,b'{"error":"One inference at a time"}')
         try:
-            request=self.rfile.read(n)
+            deadline=time.monotonic()+self.request_timeout
+            chunks=[]
+            remaining=n
+            while remaining:
+                budget=deadline-time.monotonic()
+                if budget<=0:raise TimeoutError('Request body deadline')
+                self.connection.settimeout(budget)
+                chunk=self.rfile.read1(remaining)
+                if not chunk:raise ValueError('Incomplete request body')
+                chunks.append(chunk)
+                remaining-=len(chunk)
+            self.connection.settimeout(self.request_timeout)
+            request=b''.join(chunks)
             if self.path in ['/api/qa/predict','/api/development/predict']:
                 payload=json.loads(request)
                 if not isinstance(payload,dict):raise ValueError('Invalid question')
