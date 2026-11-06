@@ -9,7 +9,7 @@ from pathlib import Path
 from qa import ROOT, SYSTEM, PII, StudyTokenizer, digest, messages, offline, verify, local_directory
 from qa_dataset import verify as verify_candidates
 from qa_long import verify_long
-from judge_review import append, rows
+from judgment_journal import append, rows
 
 
 def prepare(parent, dataset, review, specification, destination):

@@ -21,7 +21,6 @@ type TrainingRunProps = {
   note?: ReactNode;
 };
 
-/** Training loss (thin, muted) against validation loss (blue, with checkpoints). */
 export function LossChart({ rows }: LossChartProps) {
   const W = 520;
   const H = 230;
@@ -146,7 +145,6 @@ export function LossChart({ rows }: LossChartProps) {
   );
 }
 
-/** The run's measured facts, printed like the vitals box on a chart. */
 export function Facts({ facts }: FactsProps) {
   return (
     <dl className="m-0 grid grid-cols-2 border-bs-2 border-form">
@@ -163,7 +161,6 @@ export function Facts({ facts }: FactsProps) {
   );
 }
 
-/** Loss on the left, the run's facts on the right. A run without recorded loss shows its facts alone. */
 export function TrainingRun({ title, loss, model, facts, note }: TrainingRunProps) {
   const runFacts = (
     <div className="min-w-0">

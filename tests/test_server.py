@@ -1,5 +1,8 @@
 """Exercise the demo's HTTP boundary with synthetic requests and no inference."""
 import http.client
+import tempfile
+from pathlib import Path
+from unittest.mock import patch
 import threading
 import unittest
 
@@ -7,6 +10,15 @@ from server import make_server
 
 
 class ServerOriginTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        app = Path(temporary.name)
+        (app / "index.html").write_text("<html>Synthetic lab</html>")
+        fixture = patch("server.APP", app)
+        fixture.start()
+        self.addCleanup(fixture.stop)
+
     def start_server(self, origin=None):
         httpd = make_server(0, origin)
         thread = threading.Thread(target=httpd.serve_forever, daemon=True)

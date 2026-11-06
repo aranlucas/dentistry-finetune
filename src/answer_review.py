@@ -4,7 +4,7 @@ import collections
 import hashlib
 import json
 from qa import digest, local_directory
-from judge_review import append, rows
+from judgment_journal import append, rows, verified_rows
 
 RUBRIC = {
     'pass':'Required facts and qualifiers present, no unsupported claims or unusable repetition.',
@@ -13,17 +13,10 @@ RUBRIC = {
 
 
 def verify_journal(run):
-    previous=None
-    for index,item in enumerate(rows(run/'judgments.jsonl'),1):
-        value=dict(item);sha=value.pop('entry_sha256')
-        if value['sequence']!=index or value['previous_sha256']!=previous:
-            raise ValueError('Judgment sequence changed')
-        if hashlib.sha256(json.dumps(value,sort_keys=True,ensure_ascii=False).encode()).hexdigest()!=sha:
-            raise ValueError('Logged judgment changed')
+    for item in verified_rows(run/'judgments.jsonl'):
         answer=next((r for r in rows(run/f"runs/{item['condition']}-predictions.jsonl") if r['id']==item['question_id']),None)
         if answer is None or hashlib.sha256(json.dumps(answer,sort_keys=True).encode()).hexdigest()!=item['answer_sha256']:
             raise ValueError('Judged answer changed')
-        previous=sha
 
 
 def record(run, decisions):

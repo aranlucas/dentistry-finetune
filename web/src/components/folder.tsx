@@ -15,7 +15,6 @@ const sheets = [
 
 const gutter = "px-4 md:px-8 lg:px-12";
 
-/** The chart folder: index tabs on the left (on top on phones), the open experiment as a sheet beside them. */
 export function Folder() {
   return (
     <div className="mx-auto grid min-h-screen max-w-page-limit grid-cols-1 grid-rows-folder md:grid-cols-folder md:grid-rows-folder-wide lg:grid-cols-folder-wide">
@@ -77,7 +76,6 @@ export function Folder() {
   );
 }
 
-/** One sheet: its content and its own footnote. */
 export function Sheet({ title, footer, children }: SheetProps) {
   useEffect(() => {
     document.title = `${title} · Oral-board study lab`;

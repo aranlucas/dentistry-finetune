@@ -28,7 +28,6 @@ type FieldProps = {
 
 type FieldActionsProps = { children: ReactNode };
 
-/** Run one request on this Mac. Inputs on the left; model choice, action, and result on the right. */
 export function TryPanel({
   fields,
   models,
@@ -94,7 +93,6 @@ export function Field({
   );
 }
 
-/** Secondary actions under the inputs, such as loading an example. */
 export const FieldActions = ({ children }: FieldActionsProps) => (
   <div className="mbs-4 flex flex-wrap items-center gap-2.5">{children}</div>
 );

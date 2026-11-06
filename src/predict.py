@@ -5,8 +5,7 @@ import sys
 import time
 from runtime import ROOT, CFG, load_local, infer
 from resources import Guard
-from task import user_prompt, parse_strict
-from evaluate import retrieval_answer
+from task import user_prompt, parse_strict, retrieval_answer
 
 def main():
     request = json.loads(sys.stdin.read(4096))

@@ -40,26 +40,25 @@ jobs:
         working-directory: web
         run: npm ci && npm run lint && npm run format:check && npm test && npm run build
 
-      - parallel:
-          - name: Confirm only the approved dataset snapshot is present
-            run: |
-              python - <<'PY'
-              import subprocess
-              files = subprocess.check_output(['git', 'ls-files'], text=True).splitlines()
-              forbidden = ('data/', 'models/', 'adapters/', '.local/', '.hf-cache/', '.venv/')
-              assert not any(path.startswith(forbidden) for path in files)
-              assert not any(path.endswith(('.safetensors', '.gguf', '.sqlite', '.bin')) for path in files)
-              approved = {'datasets/pilot-v1/' + name for name in
-                          ['train.jsonl', 'valid.jsonl', 'heldout.jsonl', 'manifest.json',
-                           'INTEGRITY.json', 'DATASET_CARD.md']}
-              assert {path for path in files if path.startswith('datasets/')} == approved
-              PY
+      - name: Confirm only the approved dataset snapshot is present
+        run: |
+          python - <<'PY'
+          import subprocess
+          files = subprocess.check_output(['git', 'ls-files'], text=True).splitlines()
+          forbidden = ('data/', 'models/', 'adapters/', '.local/', '.hf-cache/', '.venv/')
+          assert not any(path.startswith(forbidden) for path in files)
+          assert not any(path.endswith(('.safetensors', '.gguf', '.sqlite', '.bin')) for path in files)
+          approved = {'datasets/pilot-v1/' + name for name in
+                      ['train.jsonl', 'valid.jsonl', 'heldout.jsonl', 'manifest.json',
+                       'INTEGRITY.json', 'DATASET_CARD.md']}
+          assert {path for path in files if path.startswith('datasets/')} == approved
+          PY
 
-          - name: Synthetic contract checks
-            run: python src/checks.py
+      - name: Synthetic contract checks
+        run: python src/checks.py
 
-          - name: Test
-            run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Test
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
 
-          - name: "Lint: compile source"
-            run: python -m compileall -q src tests
+      - name: "Lint: compile source"
+        run: python -m compileall -q src tests

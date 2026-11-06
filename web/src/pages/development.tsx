@@ -38,7 +38,7 @@ type ResultsProps = {
   reloading: boolean;
 };
 
-type AskProps = { d: DevData; run: string | undefined; current?: DevCase };
+type AskProps = { d: DevData; run: string; current?: DevCase };
 
 const route = getRouteApi("/development");
 
@@ -88,7 +88,7 @@ export function Development() {
           d && (
             <RunPicker
               legend="Development run"
-              value={run ?? d.runs.find((r) => r.label === d.label)?.id ?? d.runs[0]?.id}
+              value={d.run_id}
               onChange={(value) => {
                 setNavigationError(null);
                 void navigate({ search: { run: value }, replace: true }).catch((error) => {
@@ -107,7 +107,7 @@ export function Development() {
       />
       {d && (
         <Results
-          key={run ?? "default"}
+          key={d.run_id}
           d={d}
           focusedCase={focusedCase}
           inspectorRef={inspectorRef}
@@ -131,8 +131,9 @@ export function Development() {
           intro="Uses the selected run’s completed adapter on this Mac. This narrow experiment needs source checking. Questions and answers here are not saved."
         >
           <Ask
+            key={d.run_id}
             d={d}
-            run={run ?? d.runs[0]?.id}
+            run={d.run_id}
             current={d.cases.find((q) => q.id === focusedCase) ?? d.cases[0]}
           />
         </Section>

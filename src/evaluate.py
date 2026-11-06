@@ -1,19 +1,8 @@
 """Local-only raw predictions; only aggregates may be exported."""
 import argparse,hashlib,json,time
 from runtime import ROOT,CFG,load_local,infer
-from task import score,canonical,user_prompt,messages
+from task import score,user_prompt,messages,retrieval_answer
 METRICS=['json_valid','schema_valid','semantic_exact','text_exact','citation_valid','grounded_quote','correct_citation','abstained','unsupported_answer']
-
-def retrieval_answer(example):
-    """Lexical extraction from supplied candidate passages; no model or gold labels."""
-    templates=['Complete this study note: ','Finish the source sentence: ','Fill in the omitted ending: ',
-               'What words finish this source note? ','Supply the exact missing ending for review: ',
-               'For my practice notes, complete the citation-backed sentence: ']
-    note=example['note'];lead=next((t for t in templates if note.startswith(t)),None)
-    if lead is None:return canonical({'answer':'ABSTAIN','citation':'NONE'})
-    prefix=note[len(lead):];matches=[p for p in example['passages'] if p['text'].startswith(prefix+' ')]
-    if len(matches)!=1:return canonical({'answer':'ABSTAIN','citation':'NONE'})
-    return canonical({'answer':matches[0]['text'][len(prefix):].strip(),'citation':matches[0]['citation']})
 
 def summarize(rows):
     n=len(rows)
